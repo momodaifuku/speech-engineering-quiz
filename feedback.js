@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Determine current page name
     let pageName = "ポータルハブ";
-    const path = window.location.pathname;
+    const path = decodeURIComponent(window.location.pathname);
     if (path.includes("音声工学テスト")) pageName = "音声工学";
     else if (path.includes("機械学習テスト")) pageName = "機械学習";
     else if (path.includes("知識工学テスト")) pageName = "知識工学";
