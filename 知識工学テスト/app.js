@@ -31,15 +31,23 @@ document.addEventListener("DOMContentLoaded", () => {
 function setQuestionSource(source) {
   const btnPast = document.getElementById("btn-source-past");
   const btnPractice = document.getElementById("btn-source-practice");
+  const btnQuiz = document.getElementById("btn-source-quiz");
   
   if (source === 'past') {
     currentQuestions = questions;
     btnPast.className = "btn btn-primary";
     btnPractice.className = "btn btn-secondary";
-  } else {
+    btnQuiz.className = "btn btn-secondary";
+  } else if (source === 'practice') {
     currentQuestions = practiceQuestions;
     btnPast.className = "btn btn-secondary";
     btnPractice.className = "btn btn-primary";
+    btnQuiz.className = "btn btn-secondary";
+  } else if (source === 'quiz') {
+    currentQuestions = quizQuestions;
+    btnPast.className = "btn btn-secondary";
+    btnPractice.className = "btn btn-secondary";
+    btnQuiz.className = "btn btn-primary";
   }
   
   // Refresh question selector list on home screen
