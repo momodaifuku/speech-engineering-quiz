@@ -207,7 +207,31 @@ function showQuestion(index) {
   
   // Question text
   document.getElementById("quiz-question-title").textContent = q.title;
-  document.getElementById("quiz-question-text").innerHTML = q.question;
+  
+  // Resolve base path dynamically to support Vercel deployment with/without trailing slash and file:// protocol
+  let questionHtml = q.question;
+  let basePath = "";
+  const href = window.location.href;
+  
+  if (href.startsWith("file://")) {
+    basePath = href.substring(0, href.lastIndexOf("/") + 1);
+  } else {
+    let path = window.location.pathname;
+    if (path.endsWith(".html")) {
+      path = path.substring(0, path.lastIndexOf("/") + 1);
+    }
+    if (!path.endsWith("/機械学習テスト/")) {
+      if (path.endsWith("/機械学習テスト")) {
+        path = path + "/";
+      } else {
+        path = path + "機械学習テスト/";
+      }
+    }
+    basePath = path;
+  }
+  
+  questionHtml = questionHtml.replace(/extracted_images\//g, basePath + "extracted_images/");
+  document.getElementById("quiz-question-text").innerHTML = questionHtml;
   
   // Clean feedback details
   document.getElementById("quiz-feedback-card").classList.add("hidden");
