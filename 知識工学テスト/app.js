@@ -1,19 +1,18 @@
 // --- State & LocalStorage Keys ---
 const STORAGE_KEYS = {
-  BOOKMARKS: "speech_engineering_bookmarks",
-  WRONG: "speech_engineering_wrong",
-  HISTORY: "speech_engineering_history" // { questionId: "correct" | "wrong" }
+  BOOKMARKS: "knowledge_engineering_bookmarks",
+  WRONG: "knowledge_engineering_wrong",
+  HISTORY: "knowledge_engineering_history" // { questionId: "correct" | "wrong" }
 };
 
 let quizState = {
-  currentCourse: 'kakomon', // 'kakomon', 'practice'
   currentMode: 'all', // 'all', 'wrong', 'bookmarked', 'category'
   currentCategory: '',
   activeQuestions: [],
   currentIndex: 0,
   score: 0,
   wrongAddedCount: 0,
-  userSelection: null, // Used for choice or custom input values
+  userSelection: null, // Used for choices or temp sort order
   isAnswered: false
 };
 
@@ -60,35 +59,8 @@ function updateHeaderStats() {
   const bookmarks = getBookmarks();
   const wrongs = getWrongQuestions();
   
-  // Filter count based on active course
-  const activeCourseQuestionIds = questions
-    .filter(q => q.source === quizState.currentCourse)
-    .map(q => q.id);
-  
-  const filteredBookmarks = bookmarks.filter(id => activeCourseQuestionIds.includes(id));
-  const filteredWrongs = wrongs.filter(id => activeCourseQuestionIds.includes(id));
-  
-  document.querySelector("#header-bookmark-count .count").textContent = filteredBookmarks.length;
-  document.querySelector("#header-wrong-count .count").textContent = filteredWrongs.length;
-}
-
-// --- Switch Learning Course (Kakomon vs Practice) ---
-function switchCourse(course) {
-  quizState.currentCourse = course;
-  
-  // Update Tab active classes
-  document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.classList.remove("active");
-  });
-  
-  if (course === 'kakomon') {
-    document.getElementById("tab-kakomon").classList.add("active");
-  } else {
-    document.getElementById("tab-practice").classList.add("active");
-  }
-  
-  updateHeaderStats();
-  renderQuestionSelector();
+  document.querySelector("#header-bookmark-count .count").textContent = bookmarks.length;
+  document.querySelector("#header-wrong-count .count").textContent = wrongs.length;
 }
 
 // --- Home Screen: Question Selector ---
@@ -98,10 +70,7 @@ function renderQuestionSelector() {
   
   const history = getHistory();
   
-  // Filter questions based on selected course
-  const activeCourseQuestions = questions.filter(q => q.source === quizState.currentCourse);
-  
-  activeCourseQuestions.forEach((q) => {
+  questions.forEach((q, index) => {
     const btn = document.createElement("button");
     btn.className = "q-select-btn";
     
@@ -112,19 +81,8 @@ function renderQuestionSelector() {
       btn.classList.add("solved-wrong");
     }
     
-    // Label generation (e.g., "問題1", "問題3 (1)", "対策問1")
-    let shortLabel = "";
-    if (q.source === "practice") {
-      // e.g. "対策問1. ピジンとクレオール" -> "対策問1"
-      shortLabel = q.title.split(".")[0];
-    } else {
-      if (q.title.includes("(")) {
-        const parts = q.title.split(" ");
-        shortLabel = parts[0] + " " + parts[1].replace(".", "");
-      } else {
-        shortLabel = q.title.split(".")[0];
-      }
-    }
+    // Define short label (e.g. Q1-3)
+    const shortLabel = q.title.split(" ")[0] + " " + q.title.split(" ")[1];
     
     btn.innerHTML = `
       <span class="q-id">${shortLabel}</span>
@@ -132,7 +90,8 @@ function renderQuestionSelector() {
     `;
     
     btn.onclick = () => {
-      startQuizFromQuestion(q.id);
+      // Start quiz from this specific question
+      startQuizFromQuestion(index);
     };
     
     container.appendChild(btn);
@@ -148,7 +107,8 @@ function switchScreen(screenId) {
   
   const target = document.getElementById(screenId);
   target.style.display = "block";
-  target.offsetHeight; // Force reflow
+  // Force reflow for transition
+  target.offsetHeight;
   target.classList.add("active");
 }
 
@@ -167,19 +127,17 @@ function startQuiz(mode, category = '') {
   quizState.currentIndex = 0;
   quizState.isAnswered = false;
   
-  const courseQuestions = questions.filter(q => q.source === quizState.currentCourse);
-  
   let list = [];
   if (mode === 'all') {
-    list = [...courseQuestions];
+    list = [...questions];
   } else if (mode === 'category') {
-    list = courseQuestions.filter(q => q.category === category);
+    list = questions.filter(q => q.category === category);
   } else if (mode === 'wrong') {
     const wrongIds = getWrongQuestions();
-    list = courseQuestions.filter(q => wrongIds.includes(q.id));
+    list = questions.filter(q => wrongIds.includes(q.id));
   } else if (mode === 'bookmarked') {
     const bookmarkedIds = getBookmarks();
-    list = courseQuestions.filter(q => bookmarkedIds.includes(q.id));
+    list = questions.filter(q => bookmarkedIds.includes(q.id));
   }
   
   if (list.length === 0) {
@@ -195,20 +153,18 @@ function startQuiz(mode, category = '') {
   switchScreen("screen-quiz");
 }
 
-function startQuizFromQuestion(questionId) {
+function startQuizFromQuestion(questionIndex) {
+  // Starts in 'all' mode but sets the initial index to the selected question
   quizState.currentMode = 'all';
   quizState.currentCategory = '';
   quizState.score = 0;
   quizState.wrongAddedCount = 0;
   quizState.isAnswered = false;
   
-  const courseQuestions = questions.filter(q => q.source === quizState.currentCourse);
-  quizState.activeQuestions = [...courseQuestions];
+  quizState.activeQuestions = [...questions];
+  quizState.currentIndex = questionIndex;
   
-  const targetIndex = courseQuestions.findIndex(q => q.id === questionId);
-  quizState.currentIndex = targetIndex >= 0 ? targetIndex : 0;
-  
-  showQuestion(quizState.currentIndex);
+  showQuestion(questionIndex);
   switchScreen("screen-quiz");
 }
 
@@ -220,18 +176,21 @@ function showQuestion(index) {
   const q = quizState.activeQuestions[index];
   
   // Progress UI
-  const progressPercent = (index / quizState.activeQuestions.length) * 100;
+  const progressPercent = ((index) / quizState.activeQuestions.length) * 100;
   document.getElementById("quiz-progress-bar").style.width = `${progressPercent}%`;
   document.getElementById("quiz-progress-text").textContent = `${index + 1} / ${quizState.activeQuestions.length}`;
   
   // Category badge
   const categoryNames = {
-    basic: "音声の基礎・分類",
-    anatomy: "発声・呼吸の生理",
-    acoustics: "音響・信号処理"
+    ai_terms: "AI用語の確認",
+    math: "基礎数理",
+    ml_basics: "機械学習周辺知識",
+    understanding: "理解の確認",
+    r_prog: "Rプログラミング",
+    description: "記述問題"
   };
   const categoryBadge = document.getElementById("quiz-category-badge");
-  categoryBadge.textContent = categoryNames[q.category] || "音声工学";
+  categoryBadge.textContent = categoryNames[q.category] || "クイズ";
   categoryBadge.className = `badge cat-badge-${q.category}`;
   
   // Bookmark button state
@@ -249,10 +208,12 @@ function showQuestion(index) {
   document.getElementById("quiz-question-title").textContent = q.title;
   document.getElementById("quiz-question-text").textContent = q.question;
   
-  // Hide feedback panels, show submit button
+  // Hide feedback, show answer area and submit button
   document.getElementById("quiz-feedback-card").classList.add("hidden");
   document.getElementById("btn-submit-answer").classList.remove("hidden");
+  document.getElementById("keyword-feedback-area").classList.add("hidden");
   
+  // Render Answer Area based on type
   renderAnswerArea(q);
 }
 
@@ -281,7 +242,7 @@ function renderAnswerArea(q) {
     const input = document.createElement("input");
     input.type = "text";
     input.className = "input-text-glow";
-    input.placeholder = "ここに解答を入力してください";
+    input.placeholder = "ここに半角英数字で解答を入力してください";
     input.id = "quiz-text-input";
     
     // Add enter key listener
@@ -292,6 +253,40 @@ function renderAnswerArea(q) {
     container.appendChild(input);
     input.focus();
   } 
+  else if (q.type === "description") {
+    const wrapper = document.createElement("div");
+    const textarea = document.createElement("textarea");
+    textarea.className = "input-text-glow";
+    textarea.placeholder = "記述解答を入力してください（ポイントとなるキーワードを含めてください）";
+    textarea.id = "quiz-textarea-input";
+    
+    // Character limit if defined
+    if (q.charLimit) {
+      const counter = document.createElement("div");
+      counter.className = "sorting-tip";
+      counter.style.textAlign = "right";
+      counter.style.marginTop = "5px";
+      counter.id = "char-counter";
+      counter.textContent = `0 / ${q.charLimit} 文字`;
+      
+      textarea.addEventListener("input", () => {
+        counter.textContent = `${textarea.value.length} / ${q.charLimit} 文字`;
+        if (textarea.value.length > q.charLimit) {
+          counter.style.color = "var(--neon-pink)";
+        } else {
+          counter.style.color = "var(--text-muted)";
+        }
+      });
+      
+      wrapper.appendChild(textarea);
+      wrapper.appendChild(counter);
+    } else {
+      wrapper.appendChild(textarea);
+    }
+    
+    container.appendChild(wrapper);
+    textarea.focus();
+  }
   else if (q.type === "fill_blanks") {
     const wrapper = document.createElement("div");
     
@@ -310,7 +305,7 @@ function renderAnswerArea(q) {
       // Default option
       const defOpt = document.createElement("option");
       defOpt.value = "";
-      defOpt.textContent = `空欄 [ ${blank.label} ] の選択肢`;
+      defOpt.textContent = `空欄 ${blank.label} の選択肢`;
       select.appendChild(defOpt);
       
       blank.choices.forEach((choice, index) => {
@@ -327,6 +322,32 @@ function renderAnswerArea(q) {
     
     container.appendChild(wrapper);
   }
+  else if (q.type === "sort") {
+    const wrapper = document.createElement("div");
+    wrapper.className = "sorting-container";
+    
+    const tip = document.createElement("div");
+    tip.className = "sorting-tip";
+    tip.innerHTML = '<i class="fa-solid fa-circle-info neon-text-blue"></i> 小さい順、または難しい順にカードをクリックして並び替えてください。';
+    wrapper.appendChild(tip);
+    
+    quizState.userSelection = []; // Will store ordered item IDs
+    
+    q.items.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "sortable-item";
+      card.dataset.itemId = item.id;
+      card.innerHTML = `
+        <span class="sort-text">${item.text}</span>
+        <span class="sort-badge">-</span>
+      `;
+      
+      card.onclick = () => toggleSortItem(item.id, card);
+      wrapper.appendChild(card);
+    });
+    
+    container.appendChild(wrapper);
+  }
 }
 
 // --- Choice interaction ---
@@ -339,6 +360,41 @@ function selectChoice(index, element) {
   
   element.classList.add("selected");
   quizState.userSelection = index;
+}
+
+// --- Sorting interaction ---
+function toggleSortItem(id, element) {
+  if (quizState.isAnswered) return;
+  
+  const index = quizState.userSelection.indexOf(id);
+  
+  if (index > -1) {
+    // Already selected, deselect it and shift other numbers
+    quizState.userSelection.splice(index, 1);
+    element.classList.remove("active-sort");
+    element.querySelector(".sort-badge").textContent = "-";
+  } else {
+    // Select it
+    quizState.userSelection.push(id);
+    element.classList.add("active-sort");
+  }
+  
+  // Recalculate badges
+  const container = document.getElementById("quiz-answer-area");
+  quizState.userSelection.forEach((selectedId, seqIdx) => {
+    const card = container.querySelector(`[data-item-id="${selectedId}"]`);
+    if (card) {
+      card.querySelector(".sort-badge").textContent = seqIdx + 1;
+    }
+  });
+  
+  // Reset unselected badges
+  container.querySelectorAll(".sortable-item").forEach(card => {
+    const cardId = card.dataset.itemId;
+    if (!quizState.userSelection.includes(cardId)) {
+      card.querySelector(".sort-badge").textContent = "-";
+    }
+  });
 }
 
 // --- Bookmark controls ---
@@ -368,14 +424,12 @@ function normalizeText(text) {
   return text
     .trim()
     .toLowerCase()
-    // Convert full-width alphanumeric/kana to half-width where appropriate
+    // Convert full-width alphanumeric to half-width
     .replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0))
-    // Replace spaces
+    // Replace various representations of spaces
     .replace(/\s+/g, "")
-    // Convert full-width brackets, hyphens or Japanese marks if any
-    .replace(/ー/g, "-")
-    // ひらがなの揺らぎを吸収したい場合の追加処理（基本は完全一致で十分）
-    .replace(/[（）()]/g, ""); // カッコの除去
+    // Convert Japanese punctuation and symbols if any
+    .replace(/ー/g, "-");
 }
 
 // --- Answer Verification ---
@@ -384,6 +438,7 @@ function submitAnswer() {
   
   const q = quizState.activeQuestions[quizState.currentIndex];
   let isCorrect = false;
+  let partialScore = 0; // 0: wrong, 1: partial, 2: correct (for styling)
   let userRawAnswer = "";
   let correctDisplayAnswer = "";
   
@@ -403,6 +458,7 @@ function submitAnswer() {
       return;
     }
     
+    // Normalize both user answer and correct answer for comparison
     const normUser = normalizeText(inputVal);
     const normCorrect = normalizeText(q.answer);
     
@@ -425,8 +481,8 @@ function submitAnswer() {
       if (val === blank.answer) {
         correctCount++;
       }
-      userAnsArray.push(`[${blank.label}]: ${val ? blank.choices[val - 1] : "未選択"}`);
-      correctAnsArray.push(`[${blank.label}]: ${blank.choices[blank.answer - 1]}`);
+      userAnsArray.push(`${blank.label}: ${val ? blank.choices[val - 1] : "未選択"}`);
+      correctAnsArray.push(`${blank.label}: ${blank.choices[blank.answer - 1]}`);
     });
     
     if (!allFilled) {
@@ -438,21 +494,95 @@ function submitAnswer() {
     userRawAnswer = userAnsArray.join("<br>");
     correctDisplayAnswer = correctAnsArray.join("<br>");
   }
+  else if (q.type === "sort") {
+    if (quizState.userSelection.length < q.items.length) {
+      alert("すべてのアイテムを並べ替えてください。");
+      return;
+    }
+    
+    // Check elements order
+    isCorrect = true;
+    for (let i = 0; i < q.answer.length; i++) {
+      if (quizState.userSelection[i] !== q.answer[i]) {
+        isCorrect = false;
+        break;
+      }
+    }
+    
+    const userOrder = quizState.userSelection.map((id, idx) => {
+      const item = q.items.find(it => it.id === id);
+      return `${idx + 1}. ${item.text}`;
+    });
+    
+    const correctOrder = q.answer.map((id, idx) => {
+      const item = q.items.find(it => it.id === id);
+      return `${idx + 1}. ${item.text}`;
+    });
+    
+    userRawAnswer = userOrder.join(" ➔ ");
+    correctDisplayAnswer = correctOrder.join(" ➔ ");
+  }
+  else if (q.type === "description") {
+    const textareaVal = document.getElementById("quiz-textarea-input").value;
+    if (!textareaVal.trim()) {
+      alert("解答を入力してください。");
+      return;
+    }
+    
+    // Keyword scoring logic
+    const normInput = textareaVal.toLowerCase();
+    let matchCount = 0;
+    const matchResults = []; // [{keyword: "x", matched: true/false}]
+    
+    q.keywords.forEach(kw => {
+      // Check original keyword or any alternatives
+      const termsToCheck = [kw.text, ...(kw.alternative || [])];
+      const hasMatch = termsToCheck.some(term => normInput.includes(term.toLowerCase()));
+      
+      if (hasMatch) {
+        matchCount++;
+        matchResults.push({ text: kw.text, matched: true });
+      } else {
+        matchResults.push({ text: kw.text, matched: false });
+      }
+    });
+    
+    const coverage = matchCount / q.keywords.length;
+    
+    if (coverage === 1.0) {
+      isCorrect = true;
+      partialScore = 2; // Full correct
+    } else if (coverage >= 0.5) {
+      isCorrect = true; // Still marked as solved-correct but with partial visual styling
+      partialScore = 1;
+    } else {
+      isCorrect = false;
+      partialScore = 0;
+    }
+    
+    userRawAnswer = textareaVal;
+    correctDisplayAnswer = q.answer;
+    
+    // Render Keyword details tag
+    renderKeywordFeedback(matchResults);
+  }
   
   quizState.isAnswered = true;
   document.getElementById("btn-submit-answer").classList.add("hidden");
   
-  // Save stats
+  // Save statistics
   const wrongs = getWrongQuestions();
   if (isCorrect) {
-    quizState.score++;
-    saveHistory(q.id, "correct");
-    
-    // Remove from wrong attempts list if solved correctly
-    const wrongIdx = wrongs.indexOf(q.id);
-    if (wrongIdx > -1) {
-      wrongs.splice(wrongIdx, 1);
-      localStorage.setItem(STORAGE_KEYS.WRONG, JSON.stringify(wrongs));
+    if (q.type !== "description" || partialScore >= 1) {
+      quizState.score++;
+      saveHistory(q.id, "correct");
+      
+      // Remove from wrong attempts list if solved correctly
+      const wrongIdx = wrongs.indexOf(q.id);
+      if (wrongIdx > -1) {
+        wrongs.splice(wrongIdx, 1);
+        localStorage.setItem(STORAGE_KEYS.WRONG, JSON.stringify(wrongs));
+      }
     }
   } else {
     saveHistory(q.id, "wrong");
@@ -469,17 +599,33 @@ function submitAnswer() {
   const statusText = document.getElementById("feedback-status-text");
   const statusIcon = document.querySelector("#feedback-status i");
   
-  feedbackCard.classList.remove("correct-panel", "wrong-panel");
+  feedbackCard.classList.remove("correct-panel", "wrong-panel", "partial-panel");
   feedbackCard.classList.remove("hidden");
   
-  if (isCorrect) {
-    feedbackCard.classList.add("correct-panel");
-    statusText.textContent = "正解！";
-    statusIcon.className = "fa-solid fa-circle-check";
+  if (q.type === "description") {
+    if (partialScore === 2) {
+      feedbackCard.classList.add("correct-panel");
+      statusText.textContent = "正解！ キーワードがすべて含まれています。";
+      statusIcon.className = "fa-solid fa-circle-check";
+    } else if (partialScore === 1) {
+      feedbackCard.classList.add("partial-panel");
+      statusText.textContent = "ほぼ正解！ 重要なキーワードの半分以上が含まれています。";
+      statusIcon.className = "fa-solid fa-circle-exclamation";
+    } else {
+      feedbackCard.classList.add("wrong-panel");
+      statusText.textContent = "不正解。重要なキーワードが不足しています。";
+      statusIcon.className = "fa-solid fa-circle-xmark";
+    }
   } else {
-    feedbackCard.classList.add("wrong-panel");
-    statusText.textContent = "不正解...";
-    statusIcon.className = "fa-solid fa-circle-xmark";
+    if (isCorrect) {
+      feedbackCard.classList.add("correct-panel");
+      statusText.textContent = "正解！";
+      statusIcon.className = "fa-solid fa-circle-check";
+    } else {
+      feedbackCard.classList.add("wrong-panel");
+      statusText.textContent = "不正解...";
+      statusIcon.className = "fa-solid fa-circle-xmark";
+    }
   }
   
   document.getElementById("feedback-user-answer").innerHTML = userRawAnswer;
@@ -487,11 +633,29 @@ function submitAnswer() {
   document.getElementById("feedback-explanation-text").textContent = q.explanation;
 }
 
+function renderKeywordFeedback(matchResults) {
+  const area = document.getElementById("keyword-feedback-area");
+  const container = document.getElementById("keyword-match-list");
+  container.innerHTML = "";
+  area.classList.remove("hidden");
+  
+  matchResults.forEach(res => {
+    const span = document.createElement("span");
+    span.className = `keyword-tag ${res.matched ? 'matched' : 'missed'}`;
+    span.innerHTML = `
+      <i class="fa-solid ${res.matched ? 'fa-check' : 'fa-xmark'}"></i>
+      ${res.text}
+    `;
+    container.appendChild(span);
+  });
+}
+
 function nextQuestion() {
   const nextIdx = quizState.currentIndex + 1;
   if (nextIdx < quizState.activeQuestions.length) {
     showQuestion(nextIdx);
   } else {
+    // Quiz completed
     showResults();
   }
 }
@@ -505,19 +669,13 @@ function showResults() {
   document.getElementById("result-percentage").textContent = `${percentage}%`;
   
   document.getElementById("result-wrong-added").textContent = quizState.wrongAddedCount;
-  
-  // Calculate bookmarks only for the active course questions
-  const courseQuestionIds = questions
-    .filter(q => q.source === quizState.currentCourse)
-    .map(q => q.id);
-  const filteredBookmarks = getBookmarks().filter(id => courseQuestionIds.includes(id));
-  
-  document.getElementById("result-bookmarks-total").textContent = filteredBookmarks.length;
+  document.getElementById("result-bookmarks-total").textContent = getBookmarks().length;
   
   switchScreen("screen-result");
 }
 
 function restartQuiz() {
+  // Restart with same active question set
   quizState.score = 0;
   quizState.wrongAddedCount = 0;
   quizState.currentIndex = 0;
@@ -525,51 +683,4 @@ function restartQuiz() {
   
   showQuestion(0);
   switchScreen("screen-quiz");
-}
-
-// --- Floating Feedback Panel Logics ---
-let selectedFeedbackType = 'question';
-
-function toggleFeedbackPanel() {
-  const trigger = document.getElementById("feedback-trigger");
-  const panel = document.getElementById("feedback-panel");
-  trigger.classList.toggle("active");
-  panel.classList.toggle("active");
-  if (panel.classList.contains("active")) {
-    document.getElementById("feedback-content").focus();
-  }
-}
-
-function selectFeedbackType(type, btn) {
-  selectedFeedbackType = type;
-  document.querySelectorAll(".feedback-type-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-}
-
-function submitFeedback() {
-  const content = document.getElementById("feedback-content").value;
-  if (!content.trim()) {
-    alert("メッセージを入力してください。");
-    return;
-  }
-
-  // Include question info if current page is speech.html and the user is inside a quiz
-  let questionContext = "";
-  if (window.location.pathname.includes("speech.html") && quizState.activeQuestions[quizState.currentIndex]) {
-    const q = quizState.activeQuestions[quizState.currentIndex];
-    questionContext = `\n(Context Question: ID=${q.id}, Title=${q.title})`;
-  }
-
-  console.log(`[Feedback Sent] Type: ${selectedFeedbackType}, Page: ${window.location.pathname}, Content: ${content}${questionContext}`);
-
-  // Reset Form
-  document.getElementById("feedback-content").value = "";
-  toggleFeedbackPanel();
-
-  // Show Toast
-  const toast = document.getElementById("feedback-toast");
-  toast.classList.add("show");
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
 }
