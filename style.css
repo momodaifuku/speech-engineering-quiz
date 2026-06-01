@@ -943,3 +943,187 @@ body {
     justify-content: center;
   }
 }
+
+/* --- Floating Feedback Widget --- */
+.feedback-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
+.feedback-trigger {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--neon-blue) 0%, #3b82f6 100%);
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 210, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feedback-trigger:hover {
+  transform: scale(1.08) rotate(10deg);
+  box-shadow: 0 6px 24px rgba(0, 210, 255, 0.6);
+}
+
+.feedback-trigger.active {
+  transform: rotate(135deg);
+  background: #ef4444;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+}
+
+.feedback-panel {
+  position: absolute;
+  bottom: 72px;
+  right: 0;
+  width: 320px;
+  background: rgba(15, 18, 36, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-main);
+}
+
+.feedback-panel.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.feedback-panel h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  text-align: left;
+}
+
+.feedback-type-select {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.feedback-type-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 6px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.feedback-type-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+.feedback-type-btn.active.type-question {
+  background: rgba(0, 210, 255, 0.1);
+  border-color: var(--neon-blue);
+  color: var(--neon-blue);
+}
+
+.feedback-type-btn.active.type-suggest {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: var(--neon-purple);
+  color: var(--neon-purple);
+}
+
+.feedback-type-btn.active.type-debug {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.feedback-textarea {
+  width: 100%;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: none;
+  margin-bottom: 12px;
+  outline: none;
+  transition: all 0.25s ease;
+  text-align: left;
+}
+
+.feedback-textarea:focus {
+  border-color: var(--neon-blue);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.15);
+}
+
+.feedback-submit-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--neon-blue) 0%, #3b82f6 100%);
+  border: none;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.feedback-submit-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(0, 210, 255, 0.25);
+}
+
+/* --- Feedback Toast Notification --- */
+.feedback-toast {
+  position: fixed;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 180, 100, 0.95);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+  z-index: 1100;
+  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.feedback-toast.show {
+  top: 24px;
+}

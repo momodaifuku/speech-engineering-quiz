@@ -526,3 +526,50 @@ function restartQuiz() {
   showQuestion(0);
   switchScreen("screen-quiz");
 }
+
+// --- Floating Feedback Panel Logics ---
+let selectedFeedbackType = 'question';
+
+function toggleFeedbackPanel() {
+  const trigger = document.getElementById("feedback-trigger");
+  const panel = document.getElementById("feedback-panel");
+  trigger.classList.toggle("active");
+  panel.classList.toggle("active");
+  if (panel.classList.contains("active")) {
+    document.getElementById("feedback-content").focus();
+  }
+}
+
+function selectFeedbackType(type, btn) {
+  selectedFeedbackType = type;
+  document.querySelectorAll(".feedback-type-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
+function submitFeedback() {
+  const content = document.getElementById("feedback-content").value;
+  if (!content.trim()) {
+    alert("メッセージを入力してください。");
+    return;
+  }
+
+  // Include question info if current page is speech.html and the user is inside a quiz
+  let questionContext = "";
+  if (window.location.pathname.includes("speech.html") && quizState.activeQuestions[quizState.currentIndex]) {
+    const q = quizState.activeQuestions[quizState.currentIndex];
+    questionContext = `\n(Context Question: ID=${q.id}, Title=${q.title})`;
+  }
+
+  console.log(`[Feedback Sent] Type: ${selectedFeedbackType}, Page: ${window.location.pathname}, Content: ${content}${questionContext}`);
+
+  // Reset Form
+  document.getElementById("feedback-content").value = "";
+  toggleFeedbackPanel();
+
+  // Show Toast
+  const toast = document.getElementById("feedback-toast");
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}

@@ -97,5 +97,69 @@
       <p>&copy; 2026 Test Prep Hub Portal. Designed with Antigravity.</p>
     </footer>
   </div>
+
+  <!-- Feedback Widget -->
+  <div class="feedback-widget">
+    <button class="feedback-trigger" id="feedback-trigger" onclick="toggleFeedbackPanel()" title="フィードバックを送信">
+      <i class="fa-solid fa-comments"></i>
+    </button>
+    <div class="feedback-panel" id="feedback-panel">
+      <h4><i class="fa-solid fa-paper-plane"></i> フィードバック送信</h4>
+      <div class="feedback-type-select">
+        <button class="feedback-type-btn type-question active" onclick="selectFeedbackType('question', this)">質問</button>
+        <button class="feedback-type-btn type-suggest" onclick="selectFeedbackType('suggest', this)">提案</button>
+        <button class="feedback-type-btn type-debug" onclick="selectFeedbackType('debug', this)">バグ報告</button>
+      </div>
+      <textarea class="feedback-textarea" id="feedback-content" placeholder="間違いの指摘や追加してほしい機能などをご記入ください..."></textarea>
+      <button class="feedback-submit-btn" onclick="submitFeedback()">
+        <span>送信する</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="feedback-toast" id="feedback-toast">
+    <i class="fa-solid fa-circle-check"></i> <span>送信しました！ありがとうございます。</span>
+  </div>
+
+  <script>
+    let selectedFeedbackType = 'question';
+
+    function toggleFeedbackPanel() {
+      const trigger = document.getElementById("feedback-trigger");
+      const panel = document.getElementById("feedback-panel");
+      trigger.classList.toggle("active");
+      panel.classList.toggle("active");
+      if (panel.classList.contains("active")) {
+        document.getElementById("feedback-content").focus();
+      }
+    }
+
+    function selectFeedbackType(type, btn) {
+      selectedFeedbackType = type;
+      document.querySelectorAll(".feedback-type-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    function submitFeedback() {
+      const content = document.getElementById("feedback-content").value;
+      if (!content.trim()) {
+        alert("メッセージを入力してください。");
+        return;
+      }
+
+      console.log(`[Feedback Sent] Type: ${selectedFeedbackType}, Page: ${window.location.pathname}, Content: ${content}`);
+
+      // Reset Form
+      document.getElementById("feedback-content").value = "";
+      toggleFeedbackPanel();
+
+      // Show Toast
+      const toast = document.getElementById("feedback-toast");
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+  </script>
 </body>
 </html>

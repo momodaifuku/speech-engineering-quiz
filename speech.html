@@ -231,6 +231,29 @@
     </footer>
   </div>
 
+  <!-- Feedback Widget -->
+  <div class="feedback-widget">
+    <button class="feedback-trigger" id="feedback-trigger" onclick="toggleFeedbackPanel()" title="フィードバックを送信">
+      <i class="fa-solid fa-comments"></i>
+    </button>
+    <div class="feedback-panel" id="feedback-panel">
+      <h4><i class="fa-solid fa-paper-plane"></i> フィードバック送信</h4>
+      <div class="feedback-type-select">
+        <button class="feedback-type-btn type-question active" onclick="selectFeedbackType('question', this)">質問</button>
+        <button class="feedback-type-btn type-suggest" onclick="selectFeedbackType('suggest', this)">提案</button>
+        <button class="feedback-type-btn type-debug" onclick="selectFeedbackType('debug', this)">バグ報告</button>
+      </div>
+      <textarea class="feedback-textarea" id="feedback-content" placeholder="間違いの指摘や追加してほしい機能などをご記入ください..."></textarea>
+      <button class="feedback-submit-btn" onclick="submitFeedback()">
+        <span>送信する</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="feedback-toast" id="feedback-toast">
+    <i class="fa-solid fa-circle-check"></i> <span>送信しました！ありがとうございます。</span>
+  </div>
+
   <!-- JavaScript Load -->
   <script src="questions.js"></script>
   <script src="app.js"></script>
