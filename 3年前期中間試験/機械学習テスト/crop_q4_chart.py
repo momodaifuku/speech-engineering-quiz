@@ -45,4 +45,4 @@ def crop_section(image_path, y_start, y_end, output_path):
 
 if __name__ == "__main__":
     os.makedirs("extracted_images", exist_ok=True)
-    crop_section("rendered_pages/page_7.png", 1000, 1683, "extracted_images/q4_3_chart.png")
+    crop_section("rendered_pages/page_7.png", 550, 1150, "extracted_images/q4_3_chart.png")
