@@ -1,6 +1,5 @@
 # Compiled/Generated files
 rendered_pages/
-extracted_images/
 *.txt
 *.pdf
 .DS_Store

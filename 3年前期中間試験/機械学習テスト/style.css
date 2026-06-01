@@ -1002,3 +1002,21 @@ textarea.input-text-glow {
 .badge.cat-badge-multivariable { background: #f43f5e14; color: #fb7185; border-color: #fb718533; }
 
 .hidden { display: none !important; }
+
+/* --- Image Charts Styles --- */
+.quiz-image-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 15px 0 25px;
+  background: #ffffff; /* 白背景のまま見やすく表示 */
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px;
+}
+
+.quiz-chart {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
