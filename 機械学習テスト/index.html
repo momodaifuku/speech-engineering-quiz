@@ -22,12 +22,15 @@
     <!-- ヘッダー -->
     <header class="app-header">
       <div class="logo">
-        <a href="../index.html" onclick="if(window.parent && typeof window.parent.closeApp === 'function') { window.parent.closeApp(); return false; }" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+        <a href="../index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
           <i class="fa-solid fa-robot neon-text-blue"></i>
           <span class="logo-title">ML <span class="neon-text-blue">STUDY</span></span>
         </a>
       </div>
-      <div class="header-stats">
+      <div class="header-stats" style="display: flex; align-items: center; gap: 10px;">
+        <a href="../送信内容確認ページ/index.html" class="btn btn-secondary btn-sm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); height: 32px;">
+          <i class="fa-solid fa-clipboard-list"></i> フィードバック確認
+        </a>
         <span id="header-bookmark-count" class="badge badge-bookmark">
           <i class="fa-solid fa-star"></i> <span class="count">0</span>
         </span>
@@ -43,7 +46,7 @@
       <!-- ================= HOME SCREEN ================= -->
       <section id="screen-home" class="screen active">
         <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
-          <a href="../index.html" onclick="if(window.parent && typeof window.parent.closeApp === 'function') { window.parent.closeApp(); return false; }" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; text-decoration: none;">
+          <a href="../index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; text-decoration: none;">
             <i class="fa-solid fa-chevron-left"></i> 試験対策ポータルに戻る
           </a>
         </div>
@@ -234,7 +237,7 @@
             <button class="btn btn-secondary" onclick="goToHome()">
               <i class="fa-solid fa-house"></i> ホームに戻る
             </button>
-            <a href="../index.html" onclick="if(window.parent && typeof window.parent.closeApp === 'function') { window.parent.closeApp(); return false; }" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <a href="../index.html" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
               <i class="fa-solid fa-shapes"></i> ポータルに戻る
             </a>
           </div>

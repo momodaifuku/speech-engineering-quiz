@@ -21,17 +21,14 @@
   <div class="hub-container">
     <!-- ヘッダー -->
     <header class="hub-header">
-      <div class="hub-logo" id="header-logo" style="cursor: pointer;">
+      <a href="./index.html" class="hub-logo" style="text-decoration: none; color: inherit;">
         <i class="fa-solid fa-shapes neon-text-blue"></i>
         <span class="hub-title">STUDY <span class="neon-text-blue">HUB</span></span>
-      </div>
+      </a>
       <div class="header-links">
-        <button id="back-to-home-btn" class="nav-btn hidden" onclick="closeApp()">
-          <i class="fa-solid fa-house"></i> ホームへ戻る
-        </button>
-        <button data-src="./送信内容確認ページ/index.html" class="feedback-list-btn app-link">
+        <a href="./送信内容確認ページ/index.html" class="feedback-list-btn">
           <i class="fa-solid fa-clipboard-list"></i> フィードバック確認
-        </button>
+        </a>
       </div>
     </header>
 
@@ -45,7 +42,7 @@
       <!-- グリッドリンクカード -->
       <div class="hub-grid">
         <!-- 音声工学 -->
-        <div data-src="./音声工学テスト/index.html" class="hub-card card-speech app-link">
+        <a href="./音声工学テスト/index.html" class="hub-card card-speech">
           <div class="card-glow"></div>
           <div class="card-icon"><i class="fa-solid fa-waveform"></i></div>
           <div class="card-body">
@@ -53,10 +50,10 @@
             <p>音声生成の生理、音響的性質、知覚、信号処理などの過去問と選択式テスト対策演習。</p>
             <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
           </div>
-        </div>
+        </a>
 
         <!-- 機械学習 -->
-        <div data-src="./機械学習テスト/index.html" class="hub-card card-ml app-link">
+        <a href="./機械学習テスト/index.html" class="hub-card card-ml">
           <div class="card-glow"></div>
           <div class="card-icon"><i class="fa-solid fa-brain"></i></div>
           <div class="card-body">
@@ -64,10 +61,10 @@
             <p>教師あり/なし学習、モデル評価、回帰、分類、ニューラルネットワーク基礎などの過去問対策。</p>
             <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
           </div>
-        </div>
+        </a>
 
         <!-- 知識工学 -->
-        <div data-src="./知識工学テスト/index.html" class="hub-card card-knowledge app-link">
+        <a href="./知識工学テスト/index.html" class="hub-card card-knowledge">
           <div class="card-glow"></div>
           <div class="card-icon"><i class="fa-solid fa-network-wired"></i></div>
           <div class="card-body">
@@ -75,10 +72,10 @@
             <p>探索アルゴリズム、知識表現、セマンティックウェブ、オントロジー、推論ルール等の学習対策。</p>
             <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
           </div>
-        </div>
+        </a>
 
         <!-- 経済学 -->
-        <div data-src="./経済学テスト/index.html" class="hub-card card-economics app-link">
+        <a href="./経済学テスト/index.html" class="hub-card card-economics">
           <div class="card-glow"></div>
           <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
           <div class="card-body">
@@ -86,20 +83,15 @@
             <p>ミクロ・マクロ経済学、市場原理、ゲーム理論、GDP、インフレ等の選択式一問一答対策。</p>
             <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
           </div>
-        </div>
+        </a>
       </div>
     </main>
 
-    <!-- iframe 埋め込み表示コンテナ -->
-    <div class="iframe-view-container hidden" id="iframe-view-container">
-      <iframe id="app-iframe" src="" allowfullscreen></iframe>
-    </div>
-
     <!-- 回答確認ページへのリンク（下部） -->
     <div class="bottom-links-container">
-      <button data-src="./送信内容確認ページ/index.html" class="feedback-list-btn-bottom app-link">
+      <a href="./送信内容確認ページ/index.html" class="feedback-list-btn-bottom">
         <i class="fa-solid fa-clipboard-list"></i> 送信された質問・バグ報告・要望を確認する
-      </button>
+      </a>
     </div>
 
     <!-- フッター -->
@@ -112,56 +104,6 @@
   <script src="feedback.js"></script>
 
   <script>
-    // --- Page Routing & Single Page App Logics ---
-    const mainView = document.getElementById("hub-main-view");
-    const iframeContainer = document.getElementById("iframe-view-container");
-    const appIframe = document.getElementById("app-iframe");
-    const backToHomeBtn = document.getElementById("back-to-home-btn");
-    const footer = document.getElementById("hub-footer");
-
-    // Open App inside iframe
-    function openApp(url) {
-      mainView.classList.add("hidden");
-      footer.classList.add("hidden");
-      
-      // Load iframe source
-      appIframe.src = url;
-      iframeContainer.classList.remove("hidden");
-      backToHomeBtn.classList.remove("hidden");
-
-      // Scroll to top smoothly
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Close iframe and return to home
-    function closeApp() {
-      iframeContainer.classList.add("hidden");
-      appIframe.src = ""; // Clear source to stop media/logic running in background
-      backToHomeBtn.classList.add("hidden");
-
-      mainView.classList.remove("hidden");
-      footer.classList.remove("hidden");
-    }
-
-    // Expose closeApp globally so it can be called from inside iframes
-    window.closeApp = closeApp;
-
-    // Attach click events to card / button links
-    document.querySelectorAll(".app-link").forEach(link => {
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        const url = link.getAttribute("data-src");
-        if (url) {
-          openApp(url);
-        }
-      });
-    });
-
-    // Logo click returns to home
-    document.getElementById("header-logo").addEventListener("click", () => {
-      closeApp();
-    });
-
     // --- Interactive Spotlight Hover Card Effect ---
     document.querySelectorAll('.hub-card').forEach(card => {
       card.addEventListener('mousemove', e => {
