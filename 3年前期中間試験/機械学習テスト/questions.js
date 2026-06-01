@@ -212,7 +212,7 @@ const questions = [
     type: "choice",
     choices: [
       "1. $E = 1/2 * \\sum_{n=1}^{N} ( \\sum_{m=0}^{M} w_m x_n^m - t_n )^2$",
-      "2. $E = \\sum_{m'=0}^{M} w_m' \\sum_{n=1}^{N} x_n^m' x_n^m - \\sum_{n=1}^{N} t_n x_n^m$",
+      "2. $E = \\sum_{m'=0}^{M} w_{m'} \\sum_{n=1}^{N} x_n^{m'} x_n^m - \\sum_{n=1}^{N} t_n x_n^m$",
       "3. $E = (\\Phi^T\\Phi)^(-1)\\Phi^T t$",
       "4. $E = \\sum_{m=0}^{M} w_m x^m$"
     ],
@@ -228,8 +228,8 @@ const questions = [
     choices: [
       "1. $\\frac{\\partial E}{\\partial w_n} = 1/2 * \\sum_{n=1}^{N} {f(x_n) - t_n}^2$",
       "2. $\\frac{\\partial E}{\\partial w_m} = \\sqrt{2E/N}$",
-      "3. $\\frac{\\partial E}{\\partial w_m} = \\sum_{n=1}^{N} ( \\sum_{m'=0}^{M} w_m' x_n^m' - t_n ) x_n^m$",
-      "4. $\\frac{\\partial E}{\\partial w_m} = 1/2 * \\sum_{m,m'=0}^{M} \\frac{\\partial^2 E(\\tilde{w})}{\\partial w_m \\partial w_m'} \\Delta w_m \\Delta w_m'$"
+      "3. $\\frac{\\partial E}{\\partial w_m} = \\sum_{n=1}^{N} ( \\sum_{m'=0}^{M} w_{m'} x_n^{m'} - t_n ) x_n^m$",
+      "4. $\\frac{\\partial E}{\\partial w_m} = 1/2 * \\sum_{m,m'=0}^{M} \\frac{\\partial^2 E(\\tilde{w})}{\\partial w_m \\partial w_{m'}} \\Delta w_m \\Delta w_{m'}$"
     ],
     answer: 3,
     explanation: "誤差関数 E を各パラメータ w_m で偏微分すると、合成関数の微分則（チェーンルール）により、二乗の「2」が前に出て 1/2 と相殺され、括弧の中身を w_m で微分した x_n^m が後ろに掛かります。"
