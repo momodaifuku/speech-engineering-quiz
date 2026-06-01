@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>経済学テスト対策アプリ — 経済学マイスター</title>
+  <meta name="description" content="ミクロ経済学、完全競争市場、市場の失敗、労働市場のテスト対策用の一問一答・小テスト再現学習ツール。">
+  <!-- Google Fonts: Outfit for titles, Inter for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <!-- Shared Feedback Widget CSS -->
+  <link rel="stylesheet" href="../feedback.css">
+</head>
+<body>
+  <!-- 背景のネオングラデーション用デコレーション -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="app-container">
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <div class="header-logo" id="btn-logo-home">
+        <span class="logo-icon">📊</span>
+        <h1>ECON MASTER <span class="logo-accent">Pro</span></h1>
+      </div>
+      <div class="header-controls" style="display: flex; align-items: center; gap: 10px;">
+        <a href="../index.html" class="btn btn-secondary btn-sm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); height: 32px;">
+          <i class="fa-solid fa-shapes"></i> ポータルへ
+        </a>
+        <a href="../送信内容確認ページ/index.html" class="btn btn-secondary btn-sm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); height: 32px;">
+          <i class="fa-solid fa-clipboard-list"></i> フィードバック確認
+        </a>
+        <button id="theme-toggle" class="btn-icon" aria-label="テーマ切り替え" style="height: 32px; width: 32px; display: flex; align-items: center; justify-content: center;">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- メインコンテンツ領域 -->
+    <main class="app-main">
+      
+      <!-- 1. ホーム画面 (モード選択) -->
+      <section id="screen-home" class="screen active">
+        <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
+          <a href="../index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); background: rgba(255,255,255,0.03);">
+            <i class="fa-solid fa-chevron-left"></i> 試験対策ポータルに戻る
+          </a>
+        </div>
+        <div class="hero-section">
+          <h2>経済学テスト対策 <span class="gradient-text">完全攻略プログラム</span></h2>
+          <p class="hero-subtitle">ミクロ経済学の基本から、市場の失敗、労働市場、そして授業小テストの完全再現までを効率的に学習できます。</p>
+        </div>
+
+        <!-- 学習オプション設定 -->
+        <div class="settings-bar glass-panel">
+          <div class="setting-item">
+            <span class="setting-icon">🔀</span>
+            <div class="setting-text">
+              <span class="setting-title">出題順をランダムにする</span>
+              <span class="setting-desc">出題順をシャッフルして本試験さながらの実力をチェックします</span>
+            </div>
+            <label class="switch-toggle">
+              <input type="checkbox" id="shuffle-toggle">
+              <span class="slider-toggle"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="mode-cards-grid">
+          <!-- カード1: 小テスト完全再現 -->
+          <div class="mode-card glass-panel" id="card-mode-quiz">
+            <div class="card-badge">最重要</div>
+            <div class="card-icon">📝</div>
+            <h3>小テスト完全再現モード</h3>
+            <p>授業の小テスト問題（全29問）をそのまま完全再現。図表問題や穴埋め問題など、本試験で出る可能性の高い問題を直接練習できます。</p>
+            <div class="card-meta">
+              <span>全29問</span>
+              <span>•</span>
+              <span>図表/余剰計算あり</span>
+            </div>
+            <button class="btn btn-primary btn-full">小テストを開始する</button>
+          </div>
+
+          <!-- カード2: トピック別一問一答 -->
+          <div class="mode-card glass-panel" id="card-mode-flashcards">
+            <div class="card-badge badge-secondary">基礎固め</div>
+            <div class="card-icon">💡</div>
+            <h3>一問一答フラッシュカード</h3>
+            <p>ミクロ経済学の考え方、需要・供給のシフト、情報の非対称性、外部性、公共財、労働市場など、トピック別の一問一答で基礎知識を整理します。</p>
+            <div class="card-meta">
+              <span>全17テーマ</span>
+              <span>•</span>
+              <span>解説重視</span>
+            </div>
+            <button class="btn btn-secondary btn-full">一問一答を開始する</button>
+          </div>
+
+          <!-- カード3: 弱点克服・復習モード -->
+          <div class="mode-card glass-panel" id="card-mode-review">
+            <div class="card-badge badge-review">自己学習</div>
+            <div class="card-icon">🔄</div>
+            <h3>弱点克服・復習モード</h3>
+            <p>ブックマークした問題や、過去に間違えた問題を抽出して集中的に復習・学習できます。</p>
+            <div class="review-stats">
+              <div class="stat-badge">⭐ ブックマーク: <span id="stat-bookmarks-count">0</span>問</div>
+              <div class="stat-badge">❌ 要復習（弱点）: <span id="stat-wrongs-count">0</span>問</div>
+            </div>
+            <div class="review-filter-select">
+              <span class="filter-label">復習対象:</span>
+              <select id="review-type" class="gap-select" style="margin: 0; width: 100%;">
+                <option value="all">すべて（ブックマーク＋弱点）</option>
+                <option value="bookmark">ブックマークした問題のみ</option>
+                <option value="wrong">間違えた問題のみ</option>
+              </select>
+            </div>
+            <button class="btn btn-accent btn-full" id="btn-start-review" style="margin-top: auto;">復習を開始する</button>
+          </div>
+        </div>
+
+        <!-- 学習のヒント・トピック構成 -->
+        <div class="info-section glass-panel">
+          <h3>🎯 テスト範囲の重要トピック</h3>
+          <div class="topics-grid">
+            <div class="topic-item">
+              <span class="topic-num">01</span>
+              <div>
+                <h4>ミクロ経済学の考え方</h4>
+                <p>価格と価値（支払意思額）、財の種類（上級/下級）、需要・供給曲線のシフト、価格弾力性</p>
+              </div>
+            </div>
+            <div class="topic-item">
+              <span class="topic-num">02</span>
+              <div>
+                <h4>完全競争市場と政府介入</h4>
+                <p>消費者余剰・生産者余剰・総余剰、価格規制（上限/最低賃金）、参入規制と死荷重</p>
+              </div>
+            </div>
+            <div class="topic-item">
+              <span class="topic-num">03</span>
+              <div>
+                <h4>市場の失敗</h4>
+                <p>独占（利潤最大化 MR=MC、死荷重）、情報の非対称性（逆選択、モラルハザード、シグナリング、スクリーニング）</p>
+              </div>
+            </div>
+            <div class="topic-item">
+              <span class="topic-num">04</span>
+              <div>
+                <h4>外部性と公共財</h4>
+                <p>社会的費用、ピグー税/補助金、コースの定理、公共財の非排除性/非競合性、共有地の悲劇</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 学習画面 (クイズ & 一問一答) -->
+      <section id="screen-learning" class="screen">
+        <div class="learning-header">
+          <div class="learning-header-left">
+            <button id="btn-back-home" class="btn btn-text">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              ホームへ戻る
+            </button>
+            <button id="btn-open-nav" class="btn btn-secondary btn-sm">問題一覧 ☰</button>
+          </div>
+          <div class="mode-indicator" id="current-mode-name">小テスト完全再現</div>
+          <div class="progress-bar-container">
+            <div class="progress-info">
+              <span id="quiz-progress-text">問題 1 / 29</span>
+              <span id="quiz-percentage-text">0%</span>
+            </div>
+            <div class="progress-track">
+              <div id="quiz-progress-bar" class="progress-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="learning-layout">
+          <!-- 左側: 問題と解答エリア -->
+          <div class="workspace-left">
+            <div class="question-card glass-panel" id="question-card">
+              <div class="question-header">
+                <span class="category-tag" id="question-section">第1部：ミクロ経済学の基礎と市場メカニズム</span>
+                <button id="btn-bookmark" class="btn-bookmark" aria-label="ブックマーク">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="star-icon">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="question-body">
+                <p id="question-text">ここに問題文が表示されます。</p>
+              </div>
+              
+              <!-- 動的解答フォーム -->
+              <div class="answer-container" id="answer-form-container">
+                <!-- Javascriptから動的に回答欄（選択肢、穴埋め、記述など）を挿入 -->
+              </div>
+
+              <!-- 操作アクション -->
+              <div class="action-bar">
+                <button id="btn-submit" class="btn btn-primary">解答を送信する</button>
+                <button id="btn-next" class="btn btn-secondary hidden">次の問題へ ➔</button>
+              </div>
+            </div>
+
+            <!-- フィードバック & 解説カード (最初は非表示) -->
+            <div class="feedback-card glass-panel hidden" id="feedback-card">
+              <div class="feedback-status" id="feedback-status">
+                <span class="feedback-icon" id="feedback-icon">✓</span>
+                <span class="feedback-title" id="feedback-title">正解！</span>
+              </div>
+              <div class="explanation-body">
+                <h5>💡 解説・学びのポイント:</h5>
+                <p id="explanation-text">ここに解説が表示されます。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右側: グラフ表示エリア -->
+          <div class="workspace-right">
+            <div class="graph-panel glass-panel" id="graph-panel">
+              <div class="graph-header">
+                <h4>📊 インタラクティブ経済グラフ</h4>
+                <p id="graph-title">需要・供給曲線モデル</p>
+              </div>
+              <div class="graph-body" id="graph-container">
+                <!-- Javascriptによって動的SVGがここに描画されます -->
+                <svg id="economic-svg" viewBox="0 0 400 400" width="100%" height="100%">
+                  <!-- プレースホルダーまたは汎用グラフ -->
+                </svg>
+              </div>
+              <div class="graph-legend" id="graph-legend-container">
+                <!-- 凡例を動的に表示 -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 結果画面 -->
+      <section id="screen-result" class="screen">
+        <div class="result-container glass-panel">
+          <div class="result-header">
+            <div class="result-icon">🏆</div>
+            <h2>学習完了！お疲れ様でした</h2>
+            <p id="result-subtitle">小テスト完全再現モードを完了しました。</p>
+          </div>
+
+          <!-- スコア表示 -->
+          <div class="score-display">
+            <div class="score-circle">
+              <span class="score-number" id="result-score">25/29</span>
+              <span class="score-label">正答数</span>
+            </div>
+            <div class="score-details">
+              <div class="score-detail-item">
+                <span class="detail-label">正答率:</span>
+                <span class="detail-value text-success" id="result-rate">86%</span>
+              </div>
+              <div class="score-detail-item">
+                <span class="detail-label">間違えた問題数:</span>
+                <span class="detail-value text-error" id="result-wrong-count">4問</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 間違えた問題のレビューリスト -->
+          <div class="wrong-review-section">
+            <h3>🔍 要復習問題リスト</h3>
+            <p class="review-desc">間違えた問題はここで再度確認できます。クリックすると解説が開きます。</p>
+            <div id="wrong-questions-list" class="wrong-list">
+              <!-- JSで動的に追加 -->
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button id="btn-restart-quiz" class="btn btn-primary">もう一度挑戦する</button>
+            <button id="btn-result-to-home" class="btn btn-secondary">ホームに戻る</button>
+            <a href="../index.html" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); font-weight: 500; font-size: 0.9rem;">
+              <i class="fa-solid fa-shapes"></i> ポータルに戻る
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- フッター -->
+    <footer class="app-footer">
+      <p>© 2026 経済学テスト対策アプリ — Built for Academic Excellence</p>
+    </footer>
+  </div>
+
+  <!-- 問題選択ナビゲーターモーダル -->
+  <div class="modal-overlay" id="nav-modal">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h3>📂 問題一覧・ナビゲーター</h3>
+        <button class="modal-close" id="btn-close-nav">&times;</button>
+      </div>
+      <p class="modal-subtitle">各問題の解答状況（緑:正解、赤:不正解、枠線:未解答）が表示されます。番号をクリックしてジャンプできます。</p>
+      <div class="nav-grid" id="nav-grid-container">
+        <!-- JSで動的に問題ボタンを生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- クイズデータとメインスクリプトの読み込み -->
+  <script src="questions.js"></script>
+  <script src="index.js"></script>
+  <!-- Shared Feedback Widget Logic -->
+  <script src="../feedback.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+*.pdf
+*.docx
+*.txt
+.DS_Store
+node_modules/
+.vercel

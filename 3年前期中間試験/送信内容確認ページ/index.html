@@ -271,6 +271,12 @@
       border: 1px solid rgba(239, 68, 68, 0.2);
     }
 
+    .badge-type-donate {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--neon-green);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+    }
+
     .badge-page {
       background: rgba(255, 255, 255, 0.05);
       color: var(--text-main);
@@ -329,6 +335,54 @@
       margin-bottom: 16px;
       color: rgba(255, 255, 255, 0.1);
     }
+
+    /* --- Attached File Styles --- */
+    .attached-file-box {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: left;
+    }
+    .file-info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--neon-green);
+    }
+    .file-info-row i {
+      font-size: 1rem;
+    }
+    .file-download-link {
+      color: var(--neon-green);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .file-download-link:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+    .image-preview-container {
+      margin-top: 10px;
+      max-width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.2);
+      display: inline-block;
+    }
+    .attached-image-preview {
+      max-width: 100%;
+      max-height: 250px;
+      object-fit: contain;
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -355,6 +409,7 @@
         <button class="filter-btn" onclick="filterList('question', this)">質問</button>
         <button class="filter-btn" onclick="filterList('suggest', this)">提案</button>
         <button class="filter-btn" onclick="filterList('debug', this)">バグ報告</button>
+        <button class="filter-btn" onclick="filterList('donate', this)">問題寄贈</button>
       </div>
       <button class="clear-btn" onclick="clearAllFeedback()">
         <i class="fa-solid fa-trash-can"></i> すべて削除
@@ -415,10 +470,48 @@
         let typeName = "質問";
         if (fb.type === 'suggest') typeName = "提案";
         if (fb.type === 'debug') typeName = "バグ報告";
+        if (fb.type === 'donate') typeName = "問題寄贈";
 
         let contextHtml = "";
         if (fb.context) {
           contextHtml = `<div class="context-info"><i class="fa-solid fa-circle-info"></i> ${fb.context}</div>`;
+        }
+
+        let fileHtml = "";
+        if (fb.fileData) {
+          const isImage = fb.fileType && fb.fileType.startsWith('image/');
+          if (isImage) {
+            fileHtml = `
+              <div class="attached-file-box">
+                <div class="file-info-row">
+                  <i class="fa-solid fa-image"></i>
+                  <a href="${fb.fileData}" download="${fb.fileName}" class="file-download-link">
+                    <i class="fa-solid fa-download"></i> ${escapeHTML(fb.fileName)}
+                  </a>
+                </div>
+                <div class="image-preview-container">
+                  <img src="${fb.fileData}" alt="${escapeHTML(fb.fileName)}" class="attached-image-preview">
+                </div>
+              </div>
+            `;
+          } else {
+            let fileIcon = "fa-file-lines";
+            if (fb.fileType && fb.fileType.includes('pdf')) {
+              fileIcon = "fa-file-pdf";
+            } else if (fb.fileType && (fb.fileType.includes('zip') || fb.fileType.includes('compressed'))) {
+              fileIcon = "fa-file-zipper";
+            }
+            fileHtml = `
+              <div class="attached-file-box">
+                <div class="file-info-row">
+                  <i class="fa-solid ${fileIcon}"></i>
+                  <a href="${fb.fileData}" download="${fb.fileName}" class="file-download-link">
+                    <i class="fa-solid fa-download"></i> ${escapeHTML(fb.fileName)}
+                  </a>
+                </div>
+              </div>
+            `;
+          }
         }
 
         card.innerHTML = `
@@ -434,6 +527,7 @@
           </div>
           ${contextHtml}
           <div class="message-content">${escapeHTML(fb.content)}</div>
+          ${fileHtml}
         `;
         container.appendChild(card);
       });

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>フィードバック送信内容確認</title>
+  <!-- Google Fonts & Icon -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* --- Design Tokens --- */
+    :root {
+      --font-main: 'Noto Sans JP', sans-serif;
+      --font-title: 'Outfit', sans-serif;
+      --bg-dark: #070913;
+      --bg-card: rgba(255, 255, 255, 0.02);
+      --border-card: rgba(255, 255, 255, 0.05);
+      
+      --neon-blue: #00d2ff;
+      --neon-purple: #a855f7;
+      --neon-green: #00ff88;
+      --neon-red: #ef4444;
+      
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* --- Animated Star Background --- */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      background-image: 
+        radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 160px, rgba(255,255,255,0.7), rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 80px 120px, #fff, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 300px 300px;
+      opacity: 0.15;
+    }
+
+    /* --- Glowing Orbs --- */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 0;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    #orb1 {
+      width: 400px;
+      height: 400px;
+      background: var(--neon-blue);
+      top: -10%;
+      left: -10%;
+    }
+
+    #orb2 {
+      width: 450px;
+      height: 450px;
+      background: var(--neon-purple);
+      bottom: -10%;
+      right: -10%;
+    }
+
+    /* --- Container --- */
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      padding: 40px 20px;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* --- Header --- */
+    .header {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .title-area h1 {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .title-area p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-card);
+      color: var(--text-main);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--neon-blue);
+      box-shadow: 0 0 12px rgba(0, 210, 255, 0.2);
+    }
+
+    /* --- Management Toolbar --- */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .filter-btn.active {
+      background: rgba(0, 210, 255, 0.1);
+      border-color: var(--neon-blue);
+      color: var(--neon-blue);
+    }
+
+    .clear-btn {
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .clear-btn:hover {
+      background: rgba(239, 68, 68, 0.1);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.15);
+    }
+
+    /* --- Feedback List (Grid of Cards) --- */
+    .feedback-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .feedback-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .feedback-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+
+    .badge-type-question {
+      background: rgba(0, 210, 255, 0.1);
+      color: var(--neon-blue);
+      border: 1px solid rgba(0, 210, 255, 0.2);
+    }
+
+    .badge-type-suggest {
+      background: rgba(168, 85, 247, 0.1);
+      color: var(--neon-purple);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+
+    .badge-type-debug {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--neon-red);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .badge-type-donate {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--neon-green);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+    }
+
+    .badge-page {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .time {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .context-info {
+      font-size: 0.8rem;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
+      padding: 6px 12px;
+      border-left: 3px solid var(--neon-blue);
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .message-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .delete-card-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .delete-card-btn:hover {
+      color: var(--neon-red);
+    }
+
+    /* --- Empty State --- */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px dashed rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* --- Attached File Styles --- */
+    .attached-file-box {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: left;
+    }
+    .file-info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--neon-green);
+    }
+    .file-info-row i {
+      font-size: 1rem;
+    }
+    .file-download-link {
+      color: var(--neon-green);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .file-download-link:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+    .image-preview-container {
+      margin-top: 10px;
+      max-width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.2);
+      display: inline-block;
+    }
+    .attached-image-preview {
+      max-width: 100%;
+      max-height: 250px;
+      object-fit: contain;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="glow-orb" id="orb1"></div>
+  <div class="glow-orb" id="orb2"></div>
+
+  <div class="container">
+    <!-- ヘッダー -->
+    <header class="header">
+      <div class="title-area">
+        <h1>フィードバック確認</h1>
+        <p>送信された質問、提案、バグ報告の一覧（LocalStorage保存）</p>
+      </div>
+      <a href="../index.html" class="nav-btn">
+        <i class="fa-solid fa-arrow-left"></i> ポータルハブに戻る
+      </a>
+    </header>
+
+    <!-- 管理用ツールバー -->
+    <div class="toolbar">
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="filterList('all', this)">すべて</button>
+        <button class="filter-btn" onclick="filterList('question', this)">質問</button>
+        <button class="filter-btn" onclick="filterList('suggest', this)">提案</button>
+        <button class="filter-btn" onclick="filterList('debug', this)">バグ報告</button>
+        <button class="filter-btn" onclick="filterList('donate', this)">問題寄贈</button>
+      </div>
+      <button class="clear-btn" onclick="clearAllFeedback()">
+        <i class="fa-solid fa-trash-can"></i> すべて削除
+      </button>
+    </div>
+
+    <!-- 送信リスト -->
+    <main class="feedback-list" id="feedback-list-container">
+      <!-- JavaScriptで動的に追加 -->
+    </main>
+  </div>
+
+  <script>
+    let currentFilter = 'all';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderFeedbacks();
+    });
+
+    function getFeedbacks() {
+      return JSON.parse(localStorage.getItem("study_hub_feedbacks")) || [];
+    }
+
+    function saveFeedbacks(feedbacks) {
+      localStorage.setItem("study_hub_feedbacks", JSON.stringify(feedbacks));
+    }
+
+    function renderFeedbacks() {
+      const container = document.getElementById("feedback-list-container");
+      container.innerHTML = "";
+      
+      const feedbacks = getFeedbacks();
+      
+      // Filter list
+      const filtered = currentFilter === 'all' 
+        ? feedbacks 
+        : feedbacks.filter(f => f.type === currentFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon"><i class="fa-solid fa-box-open"></i></div>
+            <p>送信されたフィードバックはまだありません。</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(fb => {
+        const card = document.createElement("div");
+        card.className = "feedback-card";
+        
+        // Format Date
+        const date = new Date(fb.timestamp);
+        const formattedDate = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+        // Set type badge name
+        let typeName = "質問";
+        if (fb.type === 'suggest') typeName = "提案";
+        if (fb.type === 'debug') typeName = "バグ報告";
+        if (fb.type === 'donate') typeName = "問題寄贈";
+
+        let contextHtml = "";
+        if (fb.context) {
+          contextHtml = `<div class="context-info"><i class="fa-solid fa-circle-info"></i> ${fb.context}</div>`;
+        }
+
+        let fileHtml = "";
+        if (fb.fileData) {
+          const isImage = fb.fileType && fb.fileType.startsWith('image/');
+          if (isImage) {
+            fileHtml = `
+              <div class="attached-file-box">
+                <div class="file-info-row">
+                  <i class="fa-solid fa-image"></i>
+                  <a href="${fb.fileData}" download="${fb.fileName}" class="file-download-link">
+                    <i class="fa-solid fa-download"></i> ${escapeHTML(fb.fileName)}
+                  </a>
+                </div>
+                <div class="image-preview-container">
+                  <img src="${fb.fileData}" alt="${escapeHTML(fb.fileName)}" class="attached-image-preview">
+                </div>
+              </div>
+            `;
+          } else {
+            let fileIcon = "fa-file-lines";
+            if (fb.fileType && fb.fileType.includes('pdf')) {
+              fileIcon = "fa-file-pdf";
+            } else if (fb.fileType && (fb.fileType.includes('zip') || fb.fileType.includes('compressed'))) {
+              fileIcon = "fa-file-zipper";
+            }
+            fileHtml = `
+              <div class="attached-file-box">
+                <div class="file-info-row">
+                  <i class="fa-solid ${fileIcon}"></i>
+                  <a href="${fb.fileData}" download="${fb.fileName}" class="file-download-link">
+                    <i class="fa-solid fa-download"></i> ${escapeHTML(fb.fileName)}
+                  </a>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        card.innerHTML = `
+          <button class="delete-card-btn" onclick="deleteFeedback('${fb.id}')" title="削除">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <div class="card-header">
+            <div class="badge-row">
+              <span class="badge badge-type-${fb.type}">${typeName}</span>
+              <span class="badge badge-page">${fb.page}</span>
+            </div>
+            <span class="time">${formattedDate}</span>
+          </div>
+          ${contextHtml}
+          <div class="message-content">${escapeHTML(fb.content)}</div>
+          ${fileHtml}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterList(type, btn) {
+      currentFilter = type;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderFeedbacks();
+    }
+
+    function deleteFeedback(id) {
+      if (!confirm("このフィードバックを削除してよろしいですか？")) return;
+      const feedbacks = getFeedbacks();
+      const updated = feedbacks.filter(f => f.id !== id);
+      saveFeedbacks(updated);
+      renderFeedbacks();
+    }
+
+    function clearAllFeedback() {
+      if (!confirm("すべてのフィードバック履歴を削除してよろしいですか？\n(この操作は元に戻せません)")) return;
+      saveFeedbacks([]);
+      renderFeedbacks();
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+</html>

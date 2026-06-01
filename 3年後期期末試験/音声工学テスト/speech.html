@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音声工学 テスト対策一問一答</title>
+  <!-- Google Fonts & Icon -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="glow-orb" id="orb1"></div>
+  <div class="glow-orb" id="orb2"></div>
+
+  <div class="app-container">
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <div class="logo">
+        <a href="./index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-waveform neon-text-blue"></i>
+          <span class="logo-title">SPEECH <span class="neon-text-blue">ENG.</span></span>
+        </a>
+      </div>
+      <div class="header-stats">
+        <span id="header-bookmark-count" class="badge badge-bookmark">
+          <i class="fa-solid fa-star"></i> <span class="count">0</span>
+        </span>
+        <span id="header-wrong-count" class="badge badge-wrong">
+          <i class="fa-solid fa-circle-xmark"></i> <span class="count">0</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- メインコンテンツ領域 -->
+    <main class="app-content">
+
+      <!-- ================= HOME SCREEN ================= -->
+      <section id="screen-home" class="screen active">
+        <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
+          <a href="./index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 8px;">
+            <i class="fa-solid fa-chevron-left"></i> 試験対策ポータルに戻る
+          </a>
+        </div>
+        <div class="hero-section">
+          <h1 class="hero-title">音声工学 <span class="gradient-text">テスト対策</span></h1>
+          <p class="hero-subtitle">中間・期末過去問（言語学・生理・音響・信号処理）完全対策</p>
+        </div>
+
+        <!-- コース選択タブ -->
+        <div class="course-tabs-container">
+          <div class="course-tabs">
+            <button id="tab-kakomon" class="tab-btn active" onclick="switchCourse('kakomon')">
+              <i class="fa-solid fa-graduation-cap"></i> 過去問モード (全21問)
+            </button>
+            <button id="tab-practice" class="tab-btn" onclick="switchCourse('practice')">
+              <i class="fa-solid fa-pencil"></i> テスト対策モード (全15問)
+            </button>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- クイックスタートカード -->
+          <div class="dashboard-card action-card">
+            <h3>学習モードを選択</h3>
+            <div class="mode-buttons">
+              <button class="btn btn-primary btn-lg" onclick="startQuiz('all')">
+                <i class="fa-solid fa-play"></i> 全問連続で解く
+              </button>
+              <button class="btn btn-secondary" onclick="startQuiz('wrong')">
+                <i class="fa-solid fa-circle-xmark text-wrong"></i> 間違えた問題のみ
+              </button>
+              <button class="btn btn-secondary" onclick="startQuiz('bookmarked')">
+                <i class="fa-solid fa-star text-bookmark"></i> ブックマークのみ
+              </button>
+            </div>
+          </div>
+
+          <!-- カテゴリ選択カード -->
+          <div class="dashboard-card">
+            <h3>分野別に挑戦</h3>
+            <div class="category-list">
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'basic')">
+                <span class="cat-icon"><i class="fa-solid fa-language"></i></span>
+                <span class="cat-name">音声の基礎・分類</span>
+                <span class="cat-desc">言語系統、音の発生原因、モーラ数等</span>
+              </button>
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'anatomy')">
+                <span class="cat-icon"><i class="fa-solid fa-lungs"></i></span>
+                <span class="cat-name">発声・呼吸の生理</span>
+                <span class="cat-desc">声帯調節、呼気・吸気、舌の運動等</span>
+              </button>
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'acoustics')">
+                <span class="cat-icon"><i class="fa-solid fa-wave-square"></i></span>
+                <span class="cat-name">音響・信号処理</span>
+                <span class="cat-desc">自己相関、ケプストラム、LPC、子音等</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 途中から開始カード -->
+        <div class="dashboard-card list-card">
+          <h3>問題を選んで途中から開始</h3>
+          <div class="question-selector-grid" id="question-list-container">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= QUIZ SCREEN ================= -->
+      <section id="screen-quiz" class="screen">
+        <div class="quiz-header">
+          <button class="btn btn-icon-only" onclick="goToHome()" title="ホームに戻る">
+            <i class="fa-solid fa-house"></i>
+          </button>
+          <div class="quiz-progress-container">
+            <div class="progress-info">
+              <span id="quiz-category-badge" class="badge">音声の基礎・分類</span>
+              <span id="quiz-progress-text">1 / 21</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="quiz-progress-bar"></div>
+            </div>
+          </div>
+          <button class="btn btn-icon-only" id="btn-bookmark" onclick="toggleBookmarkCurrent()" title="ブックマークに追加/削除">
+            <i class="fa-regular fa-star"></i>
+          </button>
+        </div>
+
+        <!-- クイズカード -->
+        <div class="quiz-card">
+          <div class="quiz-question-title" id="quiz-question-title">問題1</div>
+          <div class="quiz-question-text" id="quiz-question-text">
+            問題文がここに入ります。
+          </div>
+
+          <!-- 解答入力エリア (問題タイプによって動的に切り替え) -->
+          <div class="quiz-answer-area" id="quiz-answer-area">
+            <!-- 選択問題、複数空欄、テキスト入力がここに動的に生成されます -->
+          </div>
+
+          <!-- ボタン操作エリア -->
+          <div class="quiz-action-area">
+            <button class="btn btn-primary btn-lg" id="btn-submit-answer" onclick="submitAnswer()">
+              <i class="fa-solid fa-circle-check"></i> 解答する
+            </button>
+          </div>
+        </div>
+
+        <!-- フィードバック・解説エリア (解答後に表示) -->
+        <div class="feedback-card hidden" id="quiz-feedback-card">
+          <div class="feedback-status" id="feedback-status">
+            <i class="fa-solid fa-circle-check"></i> <span id="feedback-status-text">正解！</span>
+          </div>
+
+          <div class="feedback-content">
+            <div class="feedback-answers-comparison">
+              <div class="answer-box user-answer">
+                <h6>あなたの解答:</h6>
+                <div id="feedback-user-answer">-</div>
+              </div>
+              <div class="answer-box correct-answer">
+                <h6>正解:</h6>
+                <div id="feedback-correct-answer">-</div>
+              </div>
+            </div>
+
+            <div class="feedback-explanation">
+              <h6><i class="fa-solid fa-circle-info neon-text-blue"></i> 解説:</h6>
+              <p id="feedback-explanation-text">解説テキストがここに入ります。</p>
+            </div>
+          </div>
+
+          <div class="feedback-actions">
+            <button class="btn btn-primary" id="btn-next-question" onclick="nextQuestion()">
+              次の問題へ <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= RESULT SCREEN ================= -->
+      <section id="screen-result" class="screen">
+        <div class="result-card text-center">
+          <div class="result-icon-glow">
+            <i class="fa-solid fa-trophy neon-text-blue"></i>
+          </div>
+          <h2 class="result-title">学習セッション終了</h2>
+          
+          <div class="score-display">
+            <span class="score-num" id="result-score">0</span>
+            <span class="score-slash">/</span>
+            <span class="score-total" id="result-total">0</span>
+          </div>
+          <p class="result-percentage">正答率: <span id="result-percentage">0%</span></p>
+
+          <div class="result-stats-row">
+            <div class="stat-box">
+              <span class="stat-val text-wrong" id="result-wrong-added">0</span>
+              <span class="stat-lbl">要復習に追加</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-val text-bookmark" id="result-bookmarks-total">0</span>
+              <span class="stat-lbl">総ブックマーク</span>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button class="btn btn-primary btn-lg" onclick="restartQuiz()">
+              <i class="fa-solid fa-arrows-rotate"></i> 同じ条件で再挑戦
+            </button>
+            <button class="btn btn-secondary" onclick="goToHome()">
+              <i class="fa-solid fa-house"></i> ホームに戻る
+            </button>
+            <a href="./index.html" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-shapes"></i> ポータルに戻る
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- フッター -->
+    <footer class="app-footer">
+      <p>&copy; 2026 音声工学 テスト対策一問一答システム</p>
+    </footer>
+  </div>
+
+  <!-- Feedback Widget -->
+  <div class="feedback-widget">
+    <button class="feedback-trigger" id="feedback-trigger" onclick="toggleFeedbackPanel()" title="フィードバックを送信">
+      <i class="fa-solid fa-comments"></i>
+    </button>
+    <div class="feedback-panel" id="feedback-panel">
+      <h4><i class="fa-solid fa-paper-plane"></i> フィードバック送信</h4>
+      <div class="feedback-type-select">
+        <button class="feedback-type-btn type-question active" onclick="selectFeedbackType('question', this)">質問</button>
+        <button class="feedback-type-btn type-suggest" onclick="selectFeedbackType('suggest', this)">提案</button>
+        <button class="feedback-type-btn type-debug" onclick="selectFeedbackType('debug', this)">バグ報告</button>
+      </div>
+      <textarea class="feedback-textarea" id="feedback-content" placeholder="間違いの指摘や追加してほしい機能などをご記入ください..."></textarea>
+      <button class="feedback-submit-btn" onclick="submitFeedback()">
+        <span>送信する</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="feedback-toast" id="feedback-toast">
+    <i class="fa-solid fa-circle-check"></i> <span>送信しました！ありがとうございます。</span>
+  </div>
+
+  <!-- JavaScript Load -->
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

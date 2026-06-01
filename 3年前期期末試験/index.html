@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3年前期期末試験 対策ポータル</title>
+  <!-- Google Fonts & Icon -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="portal.css">
+  <!-- Shared Feedback Widget -->
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="glow-orb" id="orb1"></div>
+  <div class="glow-orb" id="orb2"></div>
+
+  <div class="hub-container">
+    <!-- ヘッダー -->
+    <header class="hub-header">
+      <a href="./index.html" class="hub-logo" style="text-decoration: none; color: inherit;">
+        <i class="fa-solid fa-shapes neon-text-blue"></i>
+        <span class="hub-title">STUDY <span class="neon-text-blue">HUB</span></span>
+      </a>
+      <div class="header-links">
+        <a href="../index.html" class="feedback-list-btn" style="background: rgba(0, 210, 255, 0.1); border-color: rgba(0, 210, 255, 0.3);">
+          <i class="fa-solid fa-house"></i> ハブに戻る
+        </a>
+        <a href="./送信内容確認ページ/index.html" class="feedback-list-btn">
+          <i class="fa-solid fa-clipboard-list"></i> フィードバック確認
+        </a>
+      </div>
+    </header>
+
+    <!-- メインコンテンツ (ダッシュボード) -->
+    <main class="hub-main" id="hub-main-view">
+      <div class="hub-hero">
+        <h1>3年前期期末試験 <span class="gradient-text">対策ポータル</span></h1>
+        <p>この試験対策ページは現在準備中です。過去問や問題の寄贈にご協力をお願いいたします。</p>
+      </div>
+
+      <!-- グリッドリンクカード -->
+      <!-- 寄贈待ちメッセージ ＆ インラインフォーム -->
+      <div class="donation-message-container">
+        <div class="message-glow"></div>
+        <i class="fa-solid fa-gift donation-icon"></i>
+        <h2>過去問・対策問題の寄贈をお待ちしています！</h2>
+        <p>
+          この試験対策ページは現在準備中です。<br>
+          過去問や対策問題などの情報をお持ちの方は、以下のフォームからファイル（PDFや画像、テキストなど）を添付して送信していただけますと幸いです。
+        </p>
+
+        <!-- インライン寄贈フォーム -->
+        <div class="inline-donation-form" id="inline-donation-form">
+          <div class="inline-file-input-container">
+            <label for="inline-feedback-file" class="inline-file-label" id="inline-file-label">
+              <i class="fa-solid fa-file-arrow-up"></i> 過去問ファイルを添付 (最大2MB)
+            </label>
+            <input type="file" id="inline-feedback-file" accept=".pdf,.png,.jpg,.jpeg,.zip,.txt,.doc,.docx,.xlsx,.xls,.pptx,.ppt" style="display: none;">
+            <div class="inline-selected-file-info" id="inline-selected-file-info" style="display: none;">
+              <span id="inline-selected-file-name"></span>
+              <button type="button" class="inline-file-cancel-btn" id="inline-file-cancel-btn" title="キャンセル">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+          <textarea class="inline-feedback-textarea" id="inline-feedback-content" placeholder="過去問の年度や科目名、テストの傾向などの追加情報を入力してください..."></textarea>
+          <button class="inline-feedback-submit-btn" id="inline-feedback-submit-btn">
+            <i class="fa-solid fa-paper-plane"></i> 過去問を寄贈する
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- 回答確認ページへのリンク（下部） -->
+      <a href="./送信内容確認ページ/index.html" class="feedback-list-btn-bottom">
+        <i class="fa-solid fa-clipboard-list"></i> 寄贈された問題・過去問一覧を確認する
+      </a>
+
+    <!-- フッター -->
+    <footer class="hub-footer" id="hub-footer">
+      <p>&copy; 2026 Test Prep Hub Portal. Designed with Antigravity.</p>
+    </footer>
+  </div>
+
+  <!-- Shared Feedback Widget Logic -->
+  <script src="feedback.js"></script>
+
+  <script>
+    // --- Interactive Spotlight Hover Card Effect ---
+    document.querySelectorAll('.hub-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+  </script>
+</body>
+</html>

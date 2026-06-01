@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>試験対策ポータルハブ</title>
+  <title>試験対策ポータルハブ (3年)</title>
   <!-- Google Fonts & Icon -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="portal.css">
-  <!-- Shared Feedback Widget -->
-  <link rel="stylesheet" href="feedback.css">
+  <link rel="stylesheet" href="portal_hub.css">
 </head>
 <body>
   <div class="stars"></div>
@@ -21,87 +19,77 @@
   <div class="hub-container">
     <!-- ヘッダー -->
     <header class="hub-header">
-      <a href="./index.html" class="hub-logo" style="text-decoration: none; color: inherit;">
-        <i class="fa-solid fa-shapes neon-text-blue"></i>
-        <span class="hub-title">STUDY <span class="neon-text-blue">HUB</span></span>
-      </a>
+      <div class="hub-logo">
+        <i class="fa-solid fa-graduation-cap neon-text-blue"></i>
+        <span class="hub-title">STUDY <span class="neon-text-blue">PORTAL</span></span>
+      </div>
       <div class="header-links">
-        <a href="./送信内容確認ページ/index.html" class="feedback-list-btn">
-          <i class="fa-solid fa-clipboard-list"></i> フィードバック確認
+        <a href="./3年前期中間試験/送信内容確認ページ/index.html" class="feedback-list-btn">
+          <i class="fa-solid fa-clipboard-list"></i> 過去問・問題寄贈の確認
         </a>
       </div>
     </header>
 
-    <!-- メインコンテンツ (ダッシュボード) -->
-    <main class="hub-main" id="hub-main-view">
+    <!-- メインコンテンツ -->
+    <main class="hub-main">
       <div class="hub-hero">
-        <h1>試験対策 <span class="gradient-text">ポータルハブ</span></h1>
-        <p>各科目の対策ページへ素早くアクセスし、過去問・演習問題に挑戦しましょう。</p>
+        <h1>3年 試験対策 <span class="gradient-text">ポータルハブ</span></h1>
+        <p>定期試験が近づいてきたら、各試験期間の対策ページから過去問や演習問題に取り組むことができます。</p>
       </div>
 
-      <!-- グリッドリンクカード -->
+      <!-- グリッドリンクカード (4つの試験期) -->
       <div class="hub-grid">
-        <!-- 音声工学 -->
-        <a href="./音声工学テスト/index.html" class="hub-card card-speech">
+        <!-- 3年前期中間試験 -->
+        <a href="./3年前期中間試験/index.html" class="hub-card card-mid1">
           <div class="card-glow"></div>
-          <div class="card-icon"><i class="fa-solid fa-waveform"></i></div>
+          <div class="card-icon"><i class="fa-solid fa-calendar-day"></i></div>
           <div class="card-body">
-            <h3>音声工学</h3>
-            <p>音声生成の生理、音響的性質、知覚、信号処理などの過去問と選択式テスト対策演習。</p>
-            <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
+            <h3>3年前期 中間試験</h3>
+            <p>前期中間の対策ページ。音声工学、機械学習、知識工学、経済学などの対策問題にアクセスします。</p>
+            <span class="card-link-text">ポータルに入る <i class="fa-solid fa-arrow-right"></i></span>
           </div>
         </a>
 
-        <!-- 機械学習 -->
-        <a href="./機械学習テスト/index.html" class="hub-card card-ml">
+        <!-- 3年前期期末試験 -->
+        <a href="./3年前期期末試験/index.html" class="hub-card card-final1">
           <div class="card-glow"></div>
-          <div class="card-icon"><i class="fa-solid fa-brain"></i></div>
+          <div class="card-icon"><i class="fa-solid fa-calendar-days"></i></div>
           <div class="card-body">
-            <h3>機械学習</h3>
-            <p>教師あり/なし学習、モデル評価、回帰、分類、ニューラルネットワーク基礎などの過去問対策。</p>
-            <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
+            <h3>3年前期 期末試験</h3>
+            <p>前期期末の対策ページ。期末試験に向けた各種科目の対策や、過去問の演習を実施します。</p>
+            <span class="card-link-text">ポータルに入る <i class="fa-solid fa-arrow-right"></i></span>
           </div>
         </a>
 
-        <!-- 知識工学 -->
-        <a href="./知識工学テスト/index.html" class="hub-card card-knowledge">
+        <!-- 3年後期中間試験 -->
+        <a href="./3年後期中間試験/index.html" class="hub-card card-mid2">
           <div class="card-glow"></div>
-          <div class="card-icon"><i class="fa-solid fa-network-wired"></i></div>
+          <div class="card-icon"><i class="fa-solid fa-business-time"></i></div>
           <div class="card-body">
-            <h3>知識工学</h3>
-            <p>探索アルゴリズム、知識表現、セマンティックウェブ、オントロジー、推論ルール等の学習対策。</p>
-            <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
+            <h3>3年後期 中間試験</h3>
+            <p>後期中間の対策ページ。新しい科目の追加や、後期に向けた復習・過去問対策を行います。</p>
+            <span class="card-link-text">ポータルに入る <i class="fa-solid fa-arrow-right"></i></span>
           </div>
         </a>
 
-        <!-- 経済学 -->
-        <a href="./経済学テスト/index.html" class="hub-card card-economics">
+        <!-- 3年後期期末試験 -->
+        <a href="./3年後期期末試験/index.html" class="hub-card card-final2">
           <div class="card-glow"></div>
-          <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="card-icon"><i class="fa-solid fa-award"></i></div>
           <div class="card-body">
-            <h3>経済学</h3>
-            <p>ミクロ・マクロ経済学、市場原理、ゲーム理論、GDP、インフレ等の選択式一問一答対策。</p>
-            <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
+            <h3>3年後期 期末試験</h3>
+            <p>3年最後の定期試験対策ページ。総仕上げに向けた演習と、過去問・問題寄贈データの確認ができます。</p>
+            <span class="card-link-text">ポータルに入る <i class="fa-solid fa-arrow-right"></i></span>
           </div>
         </a>
       </div>
     </main>
 
-    <!-- 回答確認ページへのリンク（下部） -->
-    <div class="bottom-links-container">
-      <a href="./送信内容確認ページ/index.html" class="feedback-list-btn-bottom">
-        <i class="fa-solid fa-clipboard-list"></i> 送信された質問・バグ報告・要望を確認する
-      </a>
-    </div>
-
     <!-- フッター -->
-    <footer class="hub-footer" id="hub-footer">
-      <p>&copy; 2026 Test Prep Hub Portal. Designed with Antigravity.</p>
+    <footer class="hub-footer">
+      <p>&copy; 2026 3rd Year Exam Prep Hub Portal. Designed with Antigravity.</p>
     </footer>
   </div>
-
-  <!-- Shared Feedback Widget Logic -->
-  <script src="feedback.js"></script>
 
   <script>
     // --- Interactive Spotlight Hover Card Effect ---

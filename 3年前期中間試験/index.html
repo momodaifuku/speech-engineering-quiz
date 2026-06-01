@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3年前期中間試験 対策ポータル</title>
+  <!-- Google Fonts & Icon -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="portal.css">
+  <!-- Shared Feedback Widget -->
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="glow-orb" id="orb1"></div>
+  <div class="glow-orb" id="orb2"></div>
+
+  <div class="hub-container">
+    <!-- ヘッダー -->
+    <header class="hub-header">
+      <a href="./index.html" class="hub-logo" style="text-decoration: none; color: inherit;">
+        <i class="fa-solid fa-shapes neon-text-blue"></i>
+        <span class="hub-title">STUDY <span class="neon-text-blue">HUB</span></span>
+      </a>
+      <div class="header-links">
+        <a href="../index.html" class="feedback-list-btn" style="background: rgba(0, 210, 255, 0.1); border-color: rgba(0, 210, 255, 0.3);">
+          <i class="fa-solid fa-house"></i> ハブに戻る
+        </a>
+        <a href="./送信内容確認ページ/index.html" class="feedback-list-btn">
+          <i class="fa-solid fa-clipboard-list"></i> フィードバック確認
+        </a>
+      </div>
+    </header>
+
+    <!-- メインコンテンツ (ダッシュボード) -->
+    <main class="hub-main" id="hub-main-view">
+      <div class="hub-hero">
+        <h1>3年前期中間試験 <span class="gradient-text">対策ポータル</span></h1>
+        <p>各科目の対策ページへ素早くアクセスし、過去問・演習問題に挑戦しましょう。</p>
+      </div>
+
+      <!-- グリッドリンクカード -->
+      <div class="hub-grid">
+        <!-- 音声工学 -->
+        <a href="./音声工学テスト/index.html" class="hub-card card-speech">
+          <div class="card-glow"></div>
+          <div class="card-icon"><i class="fa-solid fa-waveform"></i></div>
+          <div class="card-body">
+            <h3>音声工学</h3>
+            <p>音声生成の生理、音響的性質、知覚、信号処理などの過去問と選択式テスト対策演習。</p>
+            <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
+
+        <!-- 機械学習 -->
+        <a href="./機械学習テスト/index.html" class="hub-card card-ml">
+          <div class="card-glow"></div>
+          <div class="card-icon"><i class="fa-solid fa-brain"></i></div>
+          <div class="card-body">
+            <h3>機械学習</h3>
+            <p>教師あり/なし学習、モデル評価、回帰、分類、ニューラルネットワーク基礎などの過去問対策。</p>
+            <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
+
+        <!-- 知識工学 -->
+        <a href="./知識工学テスト/index.html" class="hub-card card-knowledge">
+          <div class="card-glow"></div>
+          <div class="card-icon"><i class="fa-solid fa-network-wired"></i></div>
+          <div class="card-body">
+            <h3>知識工学</h3>
+            <p>探索アルゴリズム、知識表現、セマンティックウェブ、オントロジー、推論ルール等の学習対策。</p>
+            <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
+
+        <!-- 経済学 -->
+        <a href="./経済学テスト/index.html" class="hub-card card-economics">
+          <div class="card-glow"></div>
+          <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="card-body">
+            <h3>経済学</h3>
+            <p>ミクロ・マクロ経済学、市場原理、ゲーム理論、GDP、インフレ等の選択式一問一答対策。</p>
+            <span class="card-link-text">開始する <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
+      </div>
+    </main>
+
+    <!-- 回答確認ページへのリンク（下部） -->
+    <div class="bottom-links-container">
+      <a href="./送信内容確認ページ/index.html" class="feedback-list-btn-bottom">
+        <i class="fa-solid fa-clipboard-list"></i> 送信された質問・バグ報告・要望を確認する
+      </a>
+    </div>
+
+    <!-- フッター -->
+    <footer class="hub-footer" id="hub-footer">
+      <p>&copy; 2026 Test Prep Hub Portal. Designed with Antigravity.</p>
+    </footer>
+  </div>
+
+  <!-- Shared Feedback Widget Logic -->
+  <script src="feedback.js"></script>
+
+  <script>
+    // --- Interactive Spotlight Hover Card Effect ---
+    document.querySelectorAll('.hub-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+  </script>
+</body>
+</html>

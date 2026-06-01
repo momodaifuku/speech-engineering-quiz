@@ -1,0 +1,13 @@
+# Compiled/Generated files
+rendered_pages/
+extracted_images/
+*.txt
+*.pdf
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Local swift builds/temporary logs
+*.log
