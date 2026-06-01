@@ -207,7 +207,7 @@ function showQuestion(index) {
   
   // Question text
   document.getElementById("quiz-question-title").textContent = q.title;
-  document.getElementById("quiz-question-text").textContent = q.question;
+  document.getElementById("quiz-question-text").innerHTML = q.question;
   
   // Clean feedback details
   document.getElementById("quiz-feedback-card").classList.add("hidden");
