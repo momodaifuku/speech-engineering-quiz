@@ -286,7 +286,7 @@ const questions = [
     id: "q4_3",
     category: "overfitting",
     title: "問4 (3) データ量とRMS Error [選択式]",
-    question: "<p>モデル式を多項式で近似する際、トレーニングセットの RMS Error が次数 M の増加に合わせて低くなるモデル（図 3-1）に対し、データ数を変えたモデル（図 3-2）ではエラーが低くなっていません（下図参照）。その理由を推定して答えなさい。</p><div class=\"quiz-image-wrapper\"><img src=\"extracted_images/q4_3_chart.png\" alt=\"図3-1, 図3-2\" class=\"quiz-chart\"></div>",
+    question: "<p>モデル式を多項式で近似する際、トレーニングセットの RMS Error が次数 M の増加に合わせて低くなるモデル（図 3-1）に対し、データ数を変えたモデル（図 3-2）ではエラーが低くなっていません（下図参照）。その理由を推定して答えなさい。</p><div class=\"quiz-images-container\"><div class=\"quiz-image-item\"><img src=\"extracted_images/fig3_1.png\" alt=\"図3-1\" class=\"quiz-chart\"></div><div class=\"quiz-image-item\"><img src=\"extracted_images/fig3_2.png\" alt=\"図3-2\" class=\"quiz-chart\"></div></div>",
     type: "choice",
     choices: [
       "1. トレーニングセットのサンプルの数が近似式の次数 M に対して十分に多いため",
@@ -301,7 +301,7 @@ const questions = [
     id: "q4_4",
     category: "overfitting",
     title: "問4 (4) 最適な次数Mの決定 [選択式]",
-    question: "<p>モデル式を多項式で近似する際、トレーニングセット of RMS Error が次数 M の増加に合わせて低くなるモデル（図 3-1）に対し、データ数を変えたモデル（図 3-2）ではエラーが低くなっていません（下図参照）。</p><div class=\"quiz-image-wrapper\"><img src=\"extracted_images/q4_3_chart.png\" alt=\"図3-1, 図3-2\" class=\"quiz-chart\"></div><p>多項式で近似化するにあたり、最適な次数 M とその理由を述べたものを選択しなさい。</p>",
+    question: "<p>モデル式を多項式で近似する際、トレーニングセット of RMS Error が次数 M の増加に合わせて低くなるモデル（図 3-1）に対し、データ数を変えたモデル（図 3-2）ではエラーが低くなっていません（下図参照）。</p><div class=\"quiz-images-container\"><div class=\"quiz-image-item\"><img src=\"extracted_images/fig3_1.png\" alt=\"図3-1\" class=\"quiz-chart\"></div><div class=\"quiz-image-item\"><img src=\"extracted_images/fig3_2.png\" alt=\"図3-2\" class=\"quiz-chart\"></div></div><p>多項式で近似化するにあたり、最適な次数 M とその理由を述べたものを選択しなさい。</p>",
     type: "choice",
     choices: [
       "1. テストセットの RMS Error 値が最初に変化が小さくなるのは M=2 なので、最適な次数は 2 である",
