@@ -215,6 +215,11 @@ function showQuestion(index) {
   document.getElementById("keyword-feedback-area").classList.add("hidden");
   
   renderAnswerArea(q);
+
+  // Trigger MathJax rendering if loaded
+  if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+    window.MathJax.typesetPromise();
+  }
 }
 
 function renderAnswerArea(q) {
@@ -514,6 +519,11 @@ function submitAnswer() {
   document.getElementById("feedback-user-answer").innerHTML = userRawAnswer;
   document.getElementById("feedback-correct-answer").innerHTML = correctDisplayAnswer;
   document.getElementById("feedback-explanation-text").textContent = q.explanation;
+
+  // Trigger MathJax rendering if loaded
+  if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+    window.MathJax.typesetPromise();
+  }
 }
 
 function renderKeywordFeedback(matchResults) {

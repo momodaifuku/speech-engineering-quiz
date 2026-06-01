@@ -208,13 +208,13 @@ const questions = [
     id: "q3_1",
     category: "regression",
     title: "問3 (1) 誤差Eの定式化",
-    question: "トレーニングセット {(x_n, t_n)}_{n=1}^{10} （x_n: 観測点, t_n: 観測値）としてデータが与えられたとき、下記の設問に答えなさい。\n\n(1) トレーニングセットに沿う近似曲線を f(x) = \\sum_{m=0}^{M} w_m x^m とし、各観測点と近似曲線との誤差の二乗の合計を E とした場合、定式化した誤差 E を選択しなさい。",
+    question: "トレーニングセット ${(x_n, t_n)}_{n=1}^{10}$ （$x_n$: 観測点, $t_n$: 観測値）としてデータが与えられたとき、下記の設問に答えなさい。\n\n(1) トレーニングセットに沿う近似曲線を $f(x) = \\sum_{m=0}^{M} w_m x^m$ とし、各観測点と近似曲線との誤差の二乗の合計を $E$ とした場合、定式化した誤差 $E$ を選択しなさい。",
     type: "choice",
     choices: [
-      "1. E = 1/2 * \\sum_{n=1}^{N} ( \\sum_{m=0}^{M} w_m x_n^m - t_n )^2",
-      "2. E = \\sum_{m'=0}^{M} w_m' \\sum_{n=1}^{N} x_n^m' x_n^m - \\sum_{n=1}^{N} t_n x_n^m",
-      "3. E = (\\Phi^T\\Phi)^(-1)\\Phi^T t",
-      "4. E = \\sum_{m=0}^{M} w_m x^m"
+      "1. $E = 1/2 * \\sum_{n=1}^{N} ( \\sum_{m=0}^{M} w_m x_n^m - t_n )^2$",
+      "2. $E = \\sum_{m'=0}^{M} w_m' \\sum_{n=1}^{N} x_n^m' x_n^m - \\sum_{n=1}^{N} t_n x_n^m$",
+      "3. $E = (\\Phi^T\\Phi)^(-1)\\Phi^T t$",
+      "4. $E = \\sum_{m=0}^{M} w_m x^m$"
     ],
     answer: 1,
     explanation: "最小二乗法における誤差関数 E は、各データにおける「予測値と実測値の差」の二乗和です。微分時の計算を簡略化するため、通常 1/2 を乗じます。"
@@ -223,13 +223,13 @@ const questions = [
     id: "q3_2",
     category: "regression",
     title: "問3 (2) 誤差Eの偏微分",
-    question: "トレーニングセット {(x_n, t_n)}_{n=1}^{10} （x_n: 観測点, t_n: 観測値）としてデータが与えられたとき、下記の設問に答えなさい。\n\n(2) 上記誤差 E を w_m で偏微分した式 \\frac{\\partial E}{\\partial w_m} を示しなさい。",
+    question: "トレーニングセット ${(x_n, t_n)}_{n=1}^{10}$ （$x_n$: 観測点, $t_n$: 観測値）としてデータが与えられたとき、下記の設問に答えなさい。\n\n(2) 上記誤差 $E$ を $w_m$ で偏微分した式 $\\frac{\\partial E}{\\partial w_m}$ を示しなさい。",
     type: "choice",
     choices: [
-      "1. \\frac{\\partial E}{\\partial w_n} = 1/2 * \\sum_{n=1}^{N} {f(x_n) - t_n}^2",
-      "2. \\frac{\\partial E}{\\partial w_m} = \\sqrt{2E/N}",
-      "3. \\frac{\\partial E}{\\partial w_m} = \\sum_{n=1}^{N} ( \\sum_{m'=0}^{M} w_m' x_n^m' - t_n ) x_n^m",
-      "4. \\frac{\\partial E}{\\partial w_m} = 1/2 * \\sum_{m,m'=0}^{M} \\frac{\\partial^2 E(\\tilde{w})}{\\partial w_m \\partial w_m'} \\Delta w_m \\Delta w_m'"
+      "1. $\\frac{\\partial E}{\\partial w_n} = 1/2 * \\sum_{n=1}^{N} {f(x_n) - t_n}^2$",
+      "2. $\\frac{\\partial E}{\\partial w_m} = \\sqrt{2E/N}$",
+      "3. $\\frac{\\partial E}{\\partial w_m} = \\sum_{n=1}^{N} ( \\sum_{m'=0}^{M} w_m' x_n^m' - t_n ) x_n^m$",
+      "4. $\\frac{\\partial E}{\\partial w_m} = 1/2 * \\sum_{m,m'=0}^{M} \\frac{\\partial^2 E(\\tilde{w})}{\\partial w_m \\partial w_m'} \\Delta w_m \\Delta w_m'$"
     ],
     answer: 3,
     explanation: "誤差関数 E を各パラメータ w_m で偏微分すると、合成関数の微分則（チェーンルール）により、二乗の「2」が前に出て 1/2 と相殺され、括弧の中身を w_m で微分した x_n^m が後ろに掛かります。"
