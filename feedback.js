@@ -99,6 +99,28 @@ document.addEventListener("DOMContentLoaded", () => {
     feedbacks.unshift(newFeedback); // Add to beginning of array
     localStorage.setItem("study_hub_feedbacks", JSON.stringify(feedbacks));
 
+    // Send to Discord Webhook via Vercel serverless API
+    fetch("/api/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        type: selectedFeedbackType,
+        page: pageName,
+        context: questionContext,
+        content: content
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        console.error("Failed to notify Discord webhook via API.");
+      }
+    })
+    .catch(err => {
+      console.error("Error notifying Discord webhook:", err);
+    });
+
     // Reset Form
     textInput.value = "";
     trigger.classList.remove("active");
