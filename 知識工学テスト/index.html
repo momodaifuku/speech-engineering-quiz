@@ -55,6 +55,16 @@
           <p class="hero-subtitle">中間テスト過去問（2022年度）＆小テスト完全対策</p>
         </div>
 
+        <!-- 出題ソース選択の切り替えタブ -->
+        <div class="source-selector-container" style="display: flex; justify-content: center; margin-bottom: 24px; gap: 12px;">
+          <button id="btn-source-past" class="btn btn-primary" onclick="setQuestionSource('past')" style="padding: 10px 24px; font-weight: 600; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-history"></i> 過去問モード
+          </button>
+          <button id="btn-source-practice" class="btn btn-secondary" onclick="setQuestionSource('practice')" style="padding: 10px 24px; font-weight: 600; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-graduation-cap"></i> 授業対策問題モード
+          </button>
+        </div>
+
         <div class="dashboard-grid">
           <!-- クイックスタートカード -->
           <div class="dashboard-card action-card">
@@ -249,6 +259,7 @@
 
   <!-- JavaScript Load -->
   <script src="questions.js"></script>
+  <script src="practice_questions.js"></script>
   <script src="app.js"></script>
   <!-- Shared Feedback Widget Logic -->
   <script src="../feedback.js"></script>

@@ -5,6 +5,8 @@ const STORAGE_KEYS = {
   HISTORY: "knowledge_engineering_history" // { questionId: "correct" | "wrong" }
 };
 
+let currentQuestions = [];
+
 let quizState = {
   currentMode: 'all', // 'all', 'wrong', 'bookmarked', 'category'
   currentCategory: '',
@@ -18,11 +20,31 @@ let quizState = {
 
 // --- App Initialization ---
 document.addEventListener("DOMContentLoaded", () => {
+  currentQuestions = questions; // Default to past exam questions
   initStorage();
   updateHeaderStats();
   renderQuestionSelector();
   goToHome();
 });
+
+// --- Question Source Selector ---
+function setQuestionSource(source) {
+  const btnPast = document.getElementById("btn-source-past");
+  const btnPractice = document.getElementById("btn-source-practice");
+  
+  if (source === 'past') {
+    currentQuestions = questions;
+    btnPast.className = "btn btn-primary";
+    btnPractice.className = "btn btn-secondary";
+  } else {
+    currentQuestions = practiceQuestions;
+    btnPast.className = "btn btn-secondary";
+    btnPractice.className = "btn btn-primary";
+  }
+  
+  // Refresh question selector list on home screen
+  renderQuestionSelector();
+}
 
 // --- LocalStorage Utilities ---
 function initStorage() {
@@ -70,7 +92,7 @@ function renderQuestionSelector() {
   
   const history = getHistory();
   
-  questions.forEach((q, index) => {
+  currentQuestions.forEach((q, index) => {
     const btn = document.createElement("button");
     btn.className = "q-select-btn";
     
@@ -129,15 +151,15 @@ function startQuiz(mode, category = '') {
   
   let list = [];
   if (mode === 'all') {
-    list = [...questions];
+    list = [...currentQuestions];
   } else if (mode === 'category') {
-    list = questions.filter(q => q.category === category);
+    list = currentQuestions.filter(q => q.category === category);
   } else if (mode === 'wrong') {
     const wrongIds = getWrongQuestions();
-    list = questions.filter(q => wrongIds.includes(q.id));
+    list = currentQuestions.filter(q => wrongIds.includes(q.id));
   } else if (mode === 'bookmarked') {
     const bookmarkedIds = getBookmarks();
-    list = questions.filter(q => bookmarkedIds.includes(q.id));
+    list = currentQuestions.filter(q => bookmarkedIds.includes(q.id));
   }
   
   if (list.length === 0) {
@@ -161,7 +183,7 @@ function startQuizFromQuestion(questionIndex) {
   quizState.wrongAddedCount = 0;
   quizState.isAnswered = false;
   
-  quizState.activeQuestions = [...questions];
+  quizState.activeQuestions = [...currentQuestions];
   quizState.currentIndex = questionIndex;
   
   showQuestion(questionIndex);
