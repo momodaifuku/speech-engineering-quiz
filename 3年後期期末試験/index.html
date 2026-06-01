@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3年後期期末試験 対策ポータル</title>
+  <!-- Flicker Prevention Script for Theme Toggle -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <!-- Google Fonts & Icon -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +36,9 @@
         <span class="hub-title">STUDY <span class="neon-text-blue">HUB</span></span>
       </a>
       <div class="header-links">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" title="テーマ切り替え">
+          <i class="fa-solid fa-moon"></i>
+        </button>
         <a href="../index.html" class="feedback-list-btn" style="background: rgba(0, 210, 255, 0.1); border-color: rgba(0, 210, 255, 0.3);">
           <i class="fa-solid fa-house"></i> ハブに戻る
         </a>
@@ -100,5 +113,7 @@
       });
     });
   </script>
+  <!-- Theme Controller -->
+  <script src="../theme.js"></script>
 </body>
 </html>

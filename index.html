@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>試験対策ポータルハブ (3年)</title>
+  <!-- Flicker Prevention Script for Theme Toggle -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <!-- Google Fonts & Icon -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,6 +34,9 @@
         <span class="hub-title">STUDY <span class="neon-text-blue">PORTAL</span></span>
       </div>
       <div class="header-links">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" title="テーマ切り替え">
+          <i class="fa-solid fa-moon"></i>
+        </button>
         <a href="./3年前期中間試験/送信内容確認ページ/index.html" class="feedback-list-btn">
           <i class="fa-solid fa-clipboard-list"></i> 過去問・問題寄贈の確認
         </a>
@@ -103,5 +116,7 @@
       });
     });
   </script>
+  <!-- Theme Controller -->
+  <script src="theme.js"></script>
 </body>
 </html>

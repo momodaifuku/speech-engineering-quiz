@@ -23,6 +23,92 @@
   --font-body: 'Noto Sans JP', sans-serif;
 }
 
+/* --- Light Mode Overrides --- */
+:root.light-mode {
+  --bg-primary: #f1f5f9;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #f8fafc 0%, #e2e8f0 100%);
+  --panel-bg: rgba(255, 255, 255, 0.7);
+  --panel-bg-hover: rgba(255, 255, 255, 0.95);
+  --panel-border: rgba(15, 23, 42, 0.08);
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  
+  --neon-blue: #0284c7;
+  --neon-blue-glow: rgba(2, 132, 199, 0.15);
+  --neon-green: #16a34a;
+  --neon-green-glow: rgba(22, 163, 74, 0.15);
+  --neon-pink: #dc2626;
+  --neon-pink-glow: rgba(220, 38, 38, 0.15);
+  --neon-orange: #ea580c;
+  --neon-orange-glow: rgba(234, 88, 12, 0.15);
+  --neon-yellow: #d97706;
+  --neon-yellow-glow: rgba(217, 119, 6, 0.15);
+  --neon-purple: #7c3aed;
+  --neon-purple-glow: rgba(124, 58, 237, 0.15);
+}
+
+:root.light-mode .stars {
+  opacity: 0.03;
+  filter: invert(1);
+}
+
+:root.light-mode .logo-title {
+  background: linear-gradient(135deg, #0f172a 60%, var(--neon-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+:root.light-mode .choice-btn {
+  background: #ffffff;
+}
+
+:root.light-mode .choice-btn:hover {
+  background: rgba(15, 23, 42, 0.02);
+}
+
+:root.light-mode .choice-btn.selected {
+  background: rgba(2, 132, 199, 0.05);
+}
+
+:root.light-mode .input-text-glow {
+  background: #ffffff;
+  color: #0f172a;
+}
+:root.light-mode .input-text-glow:focus {
+  background: #ffffff;
+}
+
+:root.light-mode .blank-item-row {
+  background: rgba(0, 0, 0, 0.02);
+}
+:root.light-mode .blank-select {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+:root.light-mode .blank-select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+:root.light-mode .sortable-item {
+  background: #ffffff;
+}
+:root.light-mode .sortable-item:hover {
+  background: rgba(15, 23, 42, 0.02);
+}
+:root.light-mode .sortable-item.active-sort {
+  background: rgba(2, 132, 199, 0.05);
+}
+:root.light-mode .sortable-item.active-sort .sort-badge {
+  background: var(--neon-blue);
+  color: #ffffff;
+}
+
+:root.light-mode .answer-box {
+  background: rgba(0, 0, 0, 0.02);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

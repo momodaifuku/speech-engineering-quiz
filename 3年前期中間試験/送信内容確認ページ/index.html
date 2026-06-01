@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>フィードバック送信内容確認</title>
+  <!-- Flicker Prevention Script for Theme Toggle -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <!-- Google Fonts & Icon -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +36,36 @@
       
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
+    }
+
+    /* --- Light Mode --- */
+    :root.light-mode {
+      --bg-dark: #f8fafc;
+      --bg-card: rgba(255, 255, 255, 0.7);
+      --border-card: rgba(15, 23, 42, 0.08);
+      
+      --neon-blue: #0284c7;
+      --neon-purple: #7c3aed;
+      --neon-green: #16a34a;
+      --neon-red: #dc2626;
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+    }
+
+    :root.light-mode .stars {
+      opacity: 0.03;
+      filter: invert(1);
+    }
+
+    :root.light-mode .feedback-item {
+      background: #ffffff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    :root.light-mode .meta-value,
+    :root.light-mode .text-content {
+      color: #0f172a !important;
     }
 
     * {
@@ -397,9 +437,14 @@
         <h1>フィードバック確認</h1>
         <p>送信された質問、提案、バグ報告の一覧（LocalStorage保存）</p>
       </div>
-      <a href="../index.html" class="nav-btn">
-        <i class="fa-solid fa-arrow-left"></i> ポータルハブに戻る
-      </a>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button id="theme-toggle-btn" class="theme-toggle-btn nav-btn" title="テーマ切り替え" style="width: 40px; height: 40px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; border-radius: 10px;">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <a href="../index.html" class="nav-btn">
+          <i class="fa-solid fa-arrow-left"></i> ポータルハブに戻る
+        </a>
+      </div>
     </header>
 
     <!-- 管理用ツールバー -->
@@ -566,5 +611,7 @@
       );
     }
   </script>
+  <!-- Theme Controller -->
+  <script src="../../theme.js"></script>
 </body>
 </html>

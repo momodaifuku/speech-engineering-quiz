@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnLogoHome = document.getElementById("btn-logo-home");
   const btnSubmit = document.getElementById("btn-submit");
   const btnNext = document.getElementById("btn-next");
-  const btnThemeToggle = document.getElementById("theme-toggle");
+  const btnThemeToggle = document.getElementById("theme-toggle-btn");
   
   const btnRestartQuiz = document.getElementById("btn-restart-quiz");
   const btnResultToHome = document.getElementById("btn-result-to-home");
@@ -1080,15 +1080,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // 8. テーマ切り替え機能 (ダーク/ライト)
   // ------------------------------------------------------------------------
   function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute("data-theme");
-    const newTheme = (currentTheme === "dark") ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", newTheme);
-    
-    // 現在のグラフがあれば再描画してカラーテーマを合わせる
-    const q = currentQuestions[currentIndex];
-    if (q && q.graph && screens.learning.classList.contains("active")) {
-      drawGraph(q.graph, btnSubmit.classList.contains("hidden"));
-    }
+    // 現在のグラフがあれば再描画してカラーテーマを合わせる (テーマの切り替えが完了した後に実行)
+    setTimeout(() => {
+      const q = currentQuestions[currentIndex];
+      if (q && q.graph && screens.learning.classList.contains("active")) {
+        drawGraph(q.graph, btnSubmit.classList.contains("hidden"));
+      }
+    }, 50);
   }
 
   // ------------------------------------------------------------------------

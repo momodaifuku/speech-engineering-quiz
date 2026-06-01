@@ -15,6 +15,70 @@
   --text-muted: #94a3b8;
 }
 
+/* --- Light Mode Overrides --- */
+:root.light-mode {
+  --bg-dark: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --border-card: rgba(15, 23, 42, 0.08);
+  
+  --neon-blue: #0284c7;
+  --neon-purple: #7c3aed;
+  --neon-green: #16a34a;
+  --neon-yellow: #d97706;
+  
+  --text-main: #0f172a;
+  --text-muted: #475569;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.25);
+}
+
+:root.light-mode .theme-toggle-btn {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+:root.light-mode .theme-toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+:root.light-mode .stars {
+  opacity: 0.03;
+  filter: invert(1);
+}
+
+:root.light-mode .hub-card {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+:root.light-mode .hub-card h3 {
+  color: #0f172a;
+}
+
+:root.light-mode .hub-card:hover {
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
 * {
   margin: 0;
   padding: 0;

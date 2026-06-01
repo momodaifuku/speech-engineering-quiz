@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>経済学テスト対策アプリ — 経済学マイスター</title>
+  <!-- Flicker Prevention Script for Theme Toggle -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <meta name="description" content="ミクロ経済学、完全競争市場、市場の失敗、労働市場のテスト対策用の一問一答・小テスト再現学習ツール。">
   <!-- Google Fonts: Outfit for titles, Inter for body -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,20 +36,15 @@
         <h1>ECON MASTER <span class="logo-accent">Pro</span></h1>
       </div>
       <div class="header-controls" style="display: flex; align-items: center; gap: 10px;">
+        <button id="theme-toggle-btn" class="theme-toggle-btn btn-icon" title="テーマ切り替え" style="width: 32px; height: 32px; font-size: 0.95rem; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-moon"></i>
+        </button>
         <a href="../index.html" class="btn btn-secondary btn-sm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); height: 32px;">
           <i class="fa-solid fa-shapes"></i> ポータルへ
         </a>
         <a href="../送信内容確認ページ/index.html" class="btn btn-secondary btn-sm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); height: 32px;">
           <i class="fa-solid fa-clipboard-list"></i> フィードバック確認
         </a>
-        <button id="theme-toggle" class="btn-icon" aria-label="テーマ切り替え" style="height: 32px; width: 32px; display: flex; align-items: center; justify-content: center;">
-          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-          </svg>
-          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </svg>
-        </button>
       </div>
     </header>
 
@@ -319,5 +324,7 @@
   <script src="index.js"></script>
   <!-- Shared Feedback Widget Logic -->
   <script src="../feedback.js"></script>
+  <!-- Theme Controller -->
+  <script src="../../theme.js"></script>
 </body>
 </html>
