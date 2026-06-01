@@ -887,3 +887,59 @@ body {
 .hidden {
   display: none !important;
 }
+
+/* --- Course Switching Tabs --- */
+.course-tabs-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.course-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--panel-border);
+  padding: 4px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--neon-blue) 0%, #3b82f6 100%);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 576px) {
+  .course-tabs {
+    flex-direction: column;
+    width: 100%;
+  }
+  .tab-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

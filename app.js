@@ -6,6 +6,7 @@ const STORAGE_KEYS = {
 };
 
 let quizState = {
+  currentCourse: 'kakomon', // 'kakomon', 'practice'
   currentMode: 'all', // 'all', 'wrong', 'bookmarked', 'category'
   currentCategory: '',
   activeQuestions: [],
@@ -59,8 +60,35 @@ function updateHeaderStats() {
   const bookmarks = getBookmarks();
   const wrongs = getWrongQuestions();
   
-  document.querySelector("#header-bookmark-count .count").textContent = bookmarks.length;
-  document.querySelector("#header-wrong-count .count").textContent = wrongs.length;
+  // Filter count based on active course
+  const activeCourseQuestionIds = questions
+    .filter(q => q.source === quizState.currentCourse)
+    .map(q => q.id);
+  
+  const filteredBookmarks = bookmarks.filter(id => activeCourseQuestionIds.includes(id));
+  const filteredWrongs = wrongs.filter(id => activeCourseQuestionIds.includes(id));
+  
+  document.querySelector("#header-bookmark-count .count").textContent = filteredBookmarks.length;
+  document.querySelector("#header-wrong-count .count").textContent = filteredWrongs.length;
+}
+
+// --- Switch Learning Course (Kakomon vs Practice) ---
+function switchCourse(course) {
+  quizState.currentCourse = course;
+  
+  // Update Tab active classes
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+  
+  if (course === 'kakomon') {
+    document.getElementById("tab-kakomon").classList.add("active");
+  } else {
+    document.getElementById("tab-practice").classList.add("active");
+  }
+  
+  updateHeaderStats();
+  renderQuestionSelector();
 }
 
 // --- Home Screen: Question Selector ---
@@ -70,7 +98,10 @@ function renderQuestionSelector() {
   
   const history = getHistory();
   
-  questions.forEach((q, index) => {
+  // Filter questions based on selected course
+  const activeCourseQuestions = questions.filter(q => q.source === quizState.currentCourse);
+  
+  activeCourseQuestions.forEach((q) => {
     const btn = document.createElement("button");
     btn.className = "q-select-btn";
     
@@ -81,13 +112,18 @@ function renderQuestionSelector() {
       btn.classList.add("solved-wrong");
     }
     
-    // Label generation (e.g., "問題1", "問題3 (1)")
+    // Label generation (e.g., "問題1", "問題3 (1)", "対策問1")
     let shortLabel = "";
-    if (q.title.includes("(")) {
-      const parts = q.title.split(" ");
-      shortLabel = parts[0] + " " + parts[1].replace(".", "");
-    } else {
+    if (q.source === "practice") {
+      // e.g. "対策問1. ピジンとクレオール" -> "対策問1"
       shortLabel = q.title.split(".")[0];
+    } else {
+      if (q.title.includes("(")) {
+        const parts = q.title.split(" ");
+        shortLabel = parts[0] + " " + parts[1].replace(".", "");
+      } else {
+        shortLabel = q.title.split(".")[0];
+      }
     }
     
     btn.innerHTML = `
@@ -96,7 +132,7 @@ function renderQuestionSelector() {
     `;
     
     btn.onclick = () => {
-      startQuizFromQuestion(index);
+      startQuizFromQuestion(q.id);
     };
     
     container.appendChild(btn);
@@ -131,17 +167,19 @@ function startQuiz(mode, category = '') {
   quizState.currentIndex = 0;
   quizState.isAnswered = false;
   
+  const courseQuestions = questions.filter(q => q.source === quizState.currentCourse);
+  
   let list = [];
   if (mode === 'all') {
-    list = [...questions];
+    list = [...courseQuestions];
   } else if (mode === 'category') {
-    list = questions.filter(q => q.category === category);
+    list = courseQuestions.filter(q => q.category === category);
   } else if (mode === 'wrong') {
     const wrongIds = getWrongQuestions();
-    list = questions.filter(q => wrongIds.includes(q.id));
+    list = courseQuestions.filter(q => wrongIds.includes(q.id));
   } else if (mode === 'bookmarked') {
     const bookmarkedIds = getBookmarks();
-    list = questions.filter(q => bookmarkedIds.includes(q.id));
+    list = courseQuestions.filter(q => bookmarkedIds.includes(q.id));
   }
   
   if (list.length === 0) {
@@ -157,17 +195,20 @@ function startQuiz(mode, category = '') {
   switchScreen("screen-quiz");
 }
 
-function startQuizFromQuestion(questionIndex) {
+function startQuizFromQuestion(questionId) {
   quizState.currentMode = 'all';
   quizState.currentCategory = '';
   quizState.score = 0;
   quizState.wrongAddedCount = 0;
   quizState.isAnswered = false;
   
-  quizState.activeQuestions = [...questions];
-  quizState.currentIndex = questionIndex;
+  const courseQuestions = questions.filter(q => q.source === quizState.currentCourse);
+  quizState.activeQuestions = [...courseQuestions];
   
-  showQuestion(questionIndex);
+  const targetIndex = courseQuestions.findIndex(q => q.id === questionId);
+  quizState.currentIndex = targetIndex >= 0 ? targetIndex : 0;
+  
+  showQuestion(quizState.currentIndex);
   switchScreen("screen-quiz");
 }
 
@@ -464,7 +505,14 @@ function showResults() {
   document.getElementById("result-percentage").textContent = `${percentage}%`;
   
   document.getElementById("result-wrong-added").textContent = quizState.wrongAddedCount;
-  document.getElementById("result-bookmarks-total").textContent = getBookmarks().length;
+  
+  // Calculate bookmarks only for the active course questions
+  const courseQuestionIds = questions
+    .filter(q => q.source === quizState.currentCourse)
+    .map(q => q.id);
+  const filteredBookmarks = getBookmarks().filter(id => courseQuestionIds.includes(id));
+  
+  document.getElementById("result-bookmarks-total").textContent = filteredBookmarks.length;
   
   switchScreen("screen-result");
 }
