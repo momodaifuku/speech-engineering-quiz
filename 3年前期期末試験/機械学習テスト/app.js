@@ -255,7 +255,10 @@ function showQuestion(index) {
   // Clean feedback details
   document.getElementById("quiz-feedback-card").classList.add("hidden");
   document.getElementById("btn-submit-answer").classList.remove("hidden");
-  document.getElementById("keyword-feedback-area").classList.add("hidden");
+  const kwArea = document.getElementById("keyword-feedback-area");
+  if (kwArea) {
+    kwArea.classList.add("hidden");
+  }
   
   renderAnswerArea(q);
   
