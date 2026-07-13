@@ -68,8 +68,11 @@ function updateHeaderStats() {
   const filteredBookmarks = bookmarks.filter(id => activeCourseQuestionIds.includes(id));
   const filteredWrongs = wrongs.filter(id => activeCourseQuestionIds.includes(id));
   
-  document.querySelector("#header-bookmark-count .count").textContent = filteredBookmarks.length;
-  document.querySelector("#header-wrong-count .count").textContent = filteredWrongs.length;
+  const bCount = document.querySelector("#header-bookmark-count .count");
+  const wCount = document.querySelector("#header-wrong-count .count");
+  
+  if (bCount) bCount.textContent = filteredBookmarks.length;
+  if (wCount) wCount.textContent = filteredWrongs.length;
 }
 
 // --- Switch Learning Course (Kakomon vs Practice) ---
@@ -101,6 +104,7 @@ function switchCourse(course) {
 // --- Home Screen: Question Selector ---
 function renderQuestionSelector() {
   const container = document.getElementById("question-list-container");
+  if (!container) return;
   container.innerHTML = "";
   
   const history = getHistory();
@@ -119,23 +123,12 @@ function renderQuestionSelector() {
       btn.classList.add("solved-wrong");
     }
     
-    // Label generation (e.g., "問題1", "問題3 (1)", "対策問1")
-    let shortLabel = "";
-    if (q.source === "practice") {
-      // e.g. "対策問1. ピジンとクレオール" -> "対策問1"
-      shortLabel = q.title.split(".")[0];
-    } else {
-      if (q.title.includes("(")) {
-        const parts = q.title.split(" ");
-        shortLabel = parts[0] + " " + parts[1].replace(".", "");
-      } else {
-        shortLabel = q.title.split(".")[0];
-      }
-    }
+    // Simple clean title split label (e.g. "過去問 問1", "対策問1")
+    const shortLabel = q.title.split(".")[0];
     
     btn.innerHTML = `
       <span class="q-id">${shortLabel}</span>
-      <span class="q-title" title="${q.question}">${q.question}</span>
+      <span class="q-title" title="${q.title}">${q.title}</span>
     `;
     
     btn.onclick = () => {
@@ -325,7 +318,7 @@ function renderAnswerArea(q) {
       defOpt.textContent = `空欄 [ ${blank.label} ] の選択肢`;
       select.appendChild(defOpt);
       
-      blank.choices.forEach((choice, index) => {
+      q.choices.forEach((choice, index) => {
         const opt = document.createElement("option");
         opt.value = index + 1;
         opt.textContent = choice;
@@ -437,8 +430,8 @@ function submitAnswer() {
       if (val === blank.answer) {
         correctCount++;
       }
-      userAnsArray.push(`[${blank.label}]: ${val ? blank.choices[val - 1] : "未選択"}`);
-      correctAnsArray.push(`[${blank.label}]: ${blank.choices[blank.answer - 1]}`);
+      userAnsArray.push(`[${blank.label}]: ${val ? q.choices[val - 1] : "未選択"}`);
+      correctAnsArray.push(`[${blank.label}]: ${q.choices[blank.answer - 1]}`);
     });
     
     if (!allFilled) {
