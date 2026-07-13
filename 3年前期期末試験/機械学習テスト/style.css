@@ -598,14 +598,15 @@ textarea.input-text-glow {
 .blank-label {
   font-family: var(--font-title);
   font-weight: 800;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  padding: 6px 12px;
+  border-radius: 6px;
   background: rgba(0, 210, 255, 0.1);
   color: var(--neon-blue);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .blank-select {
@@ -930,3 +931,290 @@ textarea.input-text-glow {
 .badge.cat-badge-multivariable { background: #f43f5e14; color: #fb7185; border-color: #fb718533; }
 
 .hidden { display: none !important; }
+
+/* --- Course Switching Tabs --- */
+.course-tabs-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.course-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--panel-border);
+  padding: 4px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--neon-blue) 0%, #3b82f6 100%);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 576px) {
+  .course-tabs {
+    flex-direction: column;
+    width: 100%;
+  }
+  .tab-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================
+   【ライトモード対応 (Light Mode Overrides)】
+   ========================================== */
+:root.light-mode {
+  --bg-primary: #f8fafc;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #f1f5f9 0%, #e2e8f0 100%);
+  --panel-bg: rgba(255, 255, 255, 0.7);
+  --panel-bg-hover: rgba(255, 255, 255, 0.85);
+  --panel-border: rgba(15, 23, 42, 0.08);
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  
+  --neon-blue: #0284c7;
+  --neon-blue-glow: rgba(2, 132, 199, 0.2);
+  --neon-green: #16a34a;
+  --neon-green-glow: rgba(22, 163, 74, 0.2);
+  --neon-pink: #dc2626;
+  --neon-pink-glow: rgba(220, 38, 38, 0.2);
+  --neon-orange: #d97706;
+  --neon-orange-glow: rgba(217, 119, 6, 0.2);
+  --neon-yellow: #d97706;
+  --neon-yellow-glow: rgba(217, 119, 6, 0.2);
+  --neon-purple: #7c3aed;
+  --neon-purple-glow: rgba(124, 58, 237, 0.2);
+}
+
+:root.light-mode body {
+  background: var(--bg-primary);
+  background-image: var(--bg-gradient);
+  color: var(--text-main);
+}
+
+:root.light-mode .stars {
+  opacity: 0.02;
+  filter: invert(1);
+}
+
+:root.light-mode .glow-orb {
+  opacity: 0.08;
+}
+
+:root.light-mode .logo-title {
+  background: linear-gradient(135deg, #0f172a 60%, var(--neon-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+:root.light-mode .dashboard-card,
+:root.light-mode .quiz-card,
+:root.light-mode .feedback-card,
+:root.light-mode .result-card {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+:root.light-mode .btn-secondary {
+  background: rgba(15, 23, 42, 0.03);
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+:root.light-mode .btn-secondary:hover {
+  background: rgba(15, 23, 42, 0.06);
+}
+
+:root.light-mode .btn-outline-category {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+}
+
+:root.light-mode .btn-outline-category:hover {
+  background: rgba(2, 132, 199, 0.04);
+  border-color: var(--neon-blue);
+}
+
+:root.light-mode .cat-desc {
+  color: #64748b;
+}
+
+:root.light-mode .course-tabs {
+  background: rgba(15, 23, 42, 0.03);
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+:root.light-mode .tab-btn {
+  color: #475569;
+}
+
+:root.light-mode .tab-btn:hover {
+  color: #0f172a;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+:root.light-mode .tab-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--neon-blue) 0%, #3b82f6 100%);
+}
+
+:root.light-mode .q-select-btn {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+}
+
+:root.light-mode .q-select-btn:hover {
+  background: rgba(2, 132, 199, 0.05);
+  border-color: var(--neon-blue);
+}
+
+:root.light-mode .q-select-btn .q-title {
+  color: #64748b;
+}
+
+:root.light-mode .choice-btn {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+}
+
+:root.light-mode .choice-btn:hover {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.15);
+}
+
+:root.light-mode .choice-btn.selected {
+  background: rgba(2, 132, 199, 0.06);
+  border-color: var(--neon-blue);
+}
+
+:root.light-mode .input-text-glow {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+:root.light-mode .input-text-glow:focus {
+  background: #ffffff;
+  border-color: var(--neon-blue);
+}
+
+:root.light-mode .blank-item-row {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.04);
+}
+
+:root.light-mode .blank-select {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+:root.light-mode .blank-select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+:root.light-mode .answer-box {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.04);
+}
+
+:root.light-mode .theme-toggle-btn {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #0f172a !important;
+}
+
+:root.light-mode .theme-toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+}
+
+:root.light-mode .progress-bar-bg {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+:root.light-mode .badge {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+:root.light-mode .badge-bookmark {
+  color: #b45309;
+  background: rgba(217, 119, 6, 0.08);
+  border-color: rgba(217, 119, 6, 0.15);
+}
+
+:root.light-mode .badge-wrong {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.15);
+}
+
+:root.light-mode #quiz-category-badge {
+  background: rgba(2, 132, 199, 0.08);
+  color: #0284c7;
+  border-color: rgba(2, 132, 199, 0.15);
+}
+
+:root.light-mode .feedback-panel {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(15, 23, 42, 0.12);
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.15);
+  color: #0f172a;
+}
+
+:root.light-mode .feedback-panel h4 {
+  color: #0f172a;
+}
+
+:root.light-mode .feedback-textarea {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+:root.light-mode .feedback-textarea:focus {
+  background: #ffffff;
+}
+
+:root.light-mode .feedback-type-btn {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+:root.light-mode .feedback-type-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+

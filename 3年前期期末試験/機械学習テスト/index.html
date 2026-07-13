@@ -3,7 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>機械学習 中間テスト対策一問一答</title>
+  <title>機械学習 期末テスト対策一問一答</title>
+  <!-- Flicker Prevention Script for Theme Toggle -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <!-- Google Fonts & Icon -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,6 +38,9 @@
         </a>
       </div>
       <div class="header-stats" style="display: flex; align-items: center; gap: 10px;">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" title="テーマ切り替え" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: var(--text-main); width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; font-size: 0.95rem;">
+          <i class="fa-solid fa-moon"></i>
+        </button>
         <a href="../送信内容確認ページ/index.html" class="btn btn-secondary btn-sm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); height: 32px;">
           <i class="fa-solid fa-clipboard-list"></i> フィードバック確認
         </a>
@@ -46,13 +59,25 @@
       <!-- ================= HOME SCREEN ================= -->
       <section id="screen-home" class="screen active">
         <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
-          <a href="../index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; text-decoration: none;">
+          <a href="../index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
             <i class="fa-solid fa-chevron-left"></i> 試験対策ポータルに戻る
           </a>
         </div>
         <div class="hero-section">
-          <h1 class="hero-title">機械学習 <span class="gradient-text">テスト対策</span></h1>
-          <p class="hero-subtitle">中間テスト過去問（数理・アルゴリズム・統計分析）完全対策</p>
+          <h1 class="hero-title">機械学習 <span class="gradient-text">期末対策</span></h1>
+          <p class="hero-subtitle">期末過去問・授業資料（最尤推定・極値判定・反復法・K平均法・ベイズ推定）完全対策</p>
+        </div>
+
+        <!-- コース選択タブ -->
+        <div class="course-tabs-container">
+          <div class="course-tabs">
+            <button id="tab-final_past" class="tab-btn active" onclick="switchCourse('final_past')">
+              <i class="fa-solid fa-graduation-cap"></i> 過去問モード (全21問)
+            </button>
+            <button id="tab-final_lecture" class="tab-btn" onclick="switchCourse('final_lecture')">
+              <i class="fa-solid fa-pencil"></i> 授業資料ピックアップ問題 (全8問)
+            </button>
+          </div>
         </div>
 
         <div class="dashboard-grid">
@@ -61,13 +86,13 @@
             <h3>学習モードを選択</h3>
             <div class="mode-buttons">
               <button class="btn btn-primary btn-lg" onclick="startQuiz('all')">
-                <i class="fa-solid fa-play"></i> 全問連続で解く
+                <i class="fa-solid fa-play"></i> 現在のモードを全問解く
               </button>
               <button class="btn btn-secondary" onclick="startQuiz('wrong')">
-                <i class="fa-solid fa-circle-xmark text-wrong"></i> 間違えた問題（要復習）
+                <i class="fa-solid fa-circle-xmark text-wrong"></i> 間違えた問題のみ
               </button>
               <button class="btn btn-secondary" onclick="startQuiz('bookmarked')">
-                <i class="fa-solid fa-star text-bookmark"></i> ブックマークした問題
+                <i class="fa-solid fa-star text-bookmark"></i> ブックマークのみ
               </button>
             </div>
           </div>
@@ -76,40 +101,25 @@
           <div class="dashboard-card">
             <h3>分野別に挑戦</h3>
             <div class="category-list">
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'ml_types')">
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'theory')">
                 <span class="cat-icon"><i class="fa-solid fa-gears"></i></span>
-                <span class="cat-name">機械学習の種類</span>
-                <span class="cat-desc">問1：分類・回帰・クラスタリング・変数</span>
+                <span class="cat-name">言葉の定義・基礎知識</span>
+                <span class="cat-desc">最尤推定、推定量（不偏性・一致性）、反復法、SVM、指標定義</span>
               </button>
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'stats')">
-                <span class="cat-icon"><i class="fa-solid fa-chart-line"></i></span>
-                <span class="cat-name">統計分析</span>
-                <span class="cat-desc">問2：中間試験結果の偏差・分散の計算</span>
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'estimation')">
+                <span class="cat-icon"><i class="fa-solid fa-chart-pie"></i></span>
+                <span class="cat-name">最尤推定・ベイズ推定</span>
+                <span class="cat-desc">正規分布パラメータ推定、コイン問題、ベイズ確率計算など</span>
               </button>
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'regression')">
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'optimization')">
                 <span class="cat-icon"><i class="fa-solid fa-calculator"></i></span>
-                <span class="cat-name">回帰分析の数理</span>
-                <span class="cat-desc">問3：誤差関数の定式化・偏微分・Python</span>
+                <span class="cat-name">解の推定・非線形最適化</span>
+                <span class="cat-desc">勾配ベクトル、二分法、固定値反復法、ニュートン近似、正則化</span>
               </button>
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'overfitting')">
-                <span class="cat-icon"><i class="fa-solid fa-chart-bar"></i></span>
-                <span class="cat-name">過学習・交差検証</span>
-                <span class="cat-desc">問4：クロスバリデーション・次数と誤差</span>
-              </button>
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'taylor')">
-                <span class="cat-icon"><i class="fa-solid fa-arrow-trend-up"></i></span>
-                <span class="cat-name">テイラー展開</span>
-                <span class="cat-desc">問5：関数のマクローリン近似展開</span>
-              </button>
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'extremum')">
-                <span class="cat-icon"><i class="fa-solid fa-compass"></i></span>
-                <span class="cat-name">1変数極値判定</span>
-                <span class="cat-desc">問6：停留点・極値の判別</span>
-              </button>
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'multivariable')">
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'clustering')">
                 <span class="cat-icon"><i class="fa-solid fa-diagram-project"></i></span>
-                <span class="cat-name">多変数関数の数理</span>
-                <span class="cat-desc">問7：勾配・ヘッセ行列・正定値判定</span>
+                <span class="cat-name">K平均法クラスタリング</span>
+                <span class="cat-desc">K-meansによる重心更新計算、クラスタ数決定（エルボー法）</span>
               </button>
             </div>
           </div>
@@ -132,8 +142,8 @@
           </button>
           <div class="quiz-progress-container">
             <div class="progress-info">
-              <span id="quiz-category-badge" class="badge">機械学習の種類</span>
-              <span id="quiz-progress-text">1 / 20</span>
+              <span id="quiz-category-badge" class="badge">言葉の定義・基礎知識</span>
+              <span id="quiz-progress-text">1 / 21</span>
             </div>
             <div class="progress-bar-bg">
               <div class="progress-bar-fill" id="quiz-progress-bar"></div>
@@ -146,7 +156,7 @@
 
         <!-- クイズカード -->
         <div class="quiz-card">
-          <div class="quiz-question-title" id="quiz-question-title">問1 (1) 分類アルゴリズム</div>
+          <div class="quiz-question-title" id="quiz-question-title">問題1</div>
           <div class="quiz-question-text" id="quiz-question-text">
             問題文がここに入ります。
           </div>
@@ -170,14 +180,6 @@
             <i class="fa-solid fa-circle-check"></i> <span id="feedback-status-text">正解！</span>
           </div>
 
-          <!-- 記述問題用の詳細採点フィードバック -->
-          <div class="keyword-feedback hidden" id="keyword-feedback-area">
-            <h5>キーワード判定結果:</h5>
-            <div class="keyword-match-list" id="keyword-match-list">
-              <!-- キーワードの検出状態 -->
-            </div>
-          </div>
-
           <div class="feedback-content">
             <div class="feedback-answers-comparison">
               <div class="answer-box user-answer">
@@ -185,7 +187,7 @@
                 <div id="feedback-user-answer">-</div>
               </div>
               <div class="answer-box correct-answer">
-                <h6>模範解答例:</h6>
+                <h6>正解 / 模範解答:</h6>
                 <div id="feedback-correct-answer">-</div>
               </div>
             </div>
@@ -248,13 +250,26 @@
 
     <!-- フッター -->
     <footer class="app-footer">
-      <p>&copy; 2026 機械学習 中間テスト対策一問一答システム</p>
+      <p>&copy; 2026 機械学習 期末テスト対策一問一答システム</p>
     </footer>
   </div>
 
-  <!-- JavaScript Load -->
-  <script src="questions.js"></script>
-  <script src="app.js"></script>
+  <!-- MathJax for rendering equations -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- JavaScript Load with Cache Busters -->
+  <script src="questions.js?v=2.5"></script>
+  <script src="app.js?v=2.5"></script>
+  <!-- Theme Controller -->
+  <script src="../theme.js"></script>
   <!-- Shared Feedback Widget Logic -->
   <script src="../feedback.js"></script>
 </body>

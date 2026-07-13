@@ -6,6 +6,7 @@ const STORAGE_KEYS = {
 };
 
 let quizState = {
+  currentCourse: 'kakomon', // 'kakomon', 'practice'
   currentMode: 'all', // 'all', 'wrong', 'bookmarked', 'category'
   currentCategory: '',
   activeQuestions: [],
@@ -59,18 +60,59 @@ function updateHeaderStats() {
   const bookmarks = getBookmarks();
   const wrongs = getWrongQuestions();
   
-  document.querySelector("#header-bookmark-count .count").textContent = bookmarks.length;
-  document.querySelector("#header-wrong-count .count").textContent = wrongs.length;
+  // Filter count based on active course
+  const activeCourseQuestionIds = questions
+    .filter(q => q.source === quizState.currentCourse)
+    .map(q => q.id);
+  
+  const filteredBookmarks = bookmarks.filter(id => activeCourseQuestionIds.includes(id));
+  const filteredWrongs = wrongs.filter(id => activeCourseQuestionIds.includes(id));
+  
+  const bCount = document.querySelector("#header-bookmark-count .count");
+  const wCount = document.querySelector("#header-wrong-count .count");
+  
+  if (bCount) bCount.textContent = filteredBookmarks.length;
+  if (wCount) wCount.textContent = filteredWrongs.length;
+}
+
+// --- Switch Learning Course (Kakomon vs Practice) ---
+function switchCourse(course) {
+  // Map UI tabs (final_past / final_lecture) to internal sources (kakomon / practice)
+  if (course === 'final_past' || course === 'kakomon') {
+    quizState.currentCourse = 'kakomon';
+  } else {
+    quizState.currentCourse = 'practice';
+  }
+  
+  // Update Tab active classes
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+  
+  if (quizState.currentCourse === 'kakomon') {
+    const tab = document.getElementById("tab-final_past");
+    if (tab) tab.classList.add("active");
+  } else {
+    const tab = document.getElementById("tab-final_lecture");
+    if (tab) tab.classList.add("active");
+  }
+  
+  updateHeaderStats();
+  renderQuestionSelector();
 }
 
 // --- Home Screen: Question Selector ---
 function renderQuestionSelector() {
   const container = document.getElementById("question-list-container");
+  if (!container) return;
   container.innerHTML = "";
   
   const history = getHistory();
   
-  questions.forEach((q, index) => {
+  // Filter questions based on selected course
+  const activeCourseQuestions = questions.filter(q => q.source === quizState.currentCourse);
+  
+  activeCourseQuestions.forEach((q) => {
     const btn = document.createElement("button");
     btn.className = "q-select-btn";
     
@@ -81,17 +123,16 @@ function renderQuestionSelector() {
       btn.classList.add("solved-wrong");
     }
     
-    // Split title to fit nicely (e.g. "問1 (1)")
-    const labelParts = q.title.split(" ");
-    const shortLabel = labelParts.slice(0, 2).join(" ");
+    // Split title to fit nicely (e.g. "過去問 大問1")
+    const shortLabel = q.title.split(".")[0];
     
     btn.innerHTML = `
       <span class="q-id">${shortLabel}</span>
-      <span class="q-title" title="${q.question}">${q.question.substring(0, 20)}...</span>
+      <span class="q-title" title="${q.title}">${q.title}</span>
     `;
     
     btn.onclick = () => {
-      startQuizFromQuestion(index);
+      startQuizFromQuestion(q.id);
     };
     
     container.appendChild(btn);
@@ -107,11 +148,11 @@ function switchScreen(screenId) {
   
   const target = document.getElementById(screenId);
   target.style.display = "block";
-  // Force reflow for CSS transitions
   target.offsetHeight;
   target.classList.add("active");
 }
 
+// --- Go to Home Screen ---
 function goToHome() {
   switchScreen("screen-home");
   updateHeaderStats();
@@ -127,17 +168,19 @@ function startQuiz(mode, category = '') {
   quizState.currentIndex = 0;
   quizState.isAnswered = false;
   
+  const courseQuestions = questions.filter(q => q.source === quizState.currentCourse);
+  
   let list = [];
   if (mode === 'all') {
-    list = [...questions];
+    list = [...courseQuestions];
   } else if (mode === 'category') {
-    list = questions.filter(q => q.category === category);
+    list = courseQuestions.filter(q => q.category === category);
   } else if (mode === 'wrong') {
     const wrongIds = getWrongQuestions();
-    list = questions.filter(q => wrongIds.includes(q.id));
+    list = courseQuestions.filter(q => wrongIds.includes(q.id));
   } else if (mode === 'bookmarked') {
     const bookmarkedIds = getBookmarks();
-    list = questions.filter(q => bookmarkedIds.includes(q.id));
+    list = courseQuestions.filter(q => bookmarkedIds.includes(q.id));
   }
   
   if (list.length === 0) {
@@ -153,17 +196,20 @@ function startQuiz(mode, category = '') {
   switchScreen("screen-quiz");
 }
 
-function startQuizFromQuestion(questionIndex) {
+function startQuizFromQuestion(questionId) {
   quizState.currentMode = 'all';
   quizState.currentCategory = '';
   quizState.score = 0;
   quizState.wrongAddedCount = 0;
   quizState.isAnswered = false;
   
-  quizState.activeQuestions = [...questions];
-  quizState.currentIndex = questionIndex;
+  const courseQuestions = questions.filter(q => q.source === quizState.currentCourse);
+  quizState.activeQuestions = [...courseQuestions];
   
-  showQuestion(questionIndex);
+  const targetIndex = courseQuestions.findIndex(q => q.id === questionId);
+  quizState.currentIndex = targetIndex >= 0 ? targetIndex : 0;
+  
+  showQuestion(quizState.currentIndex);
   switchScreen("screen-quiz");
 }
 
@@ -182,16 +228,13 @@ function showQuestion(index) {
   
   // Category badge
   const categoryNames = {
-    ml_types: "機械学習の種類",
-    stats: "統計分析",
-    regression: "回帰分析の数理",
-    overfitting: "過学習・交差検証",
-    taylor: "テイラー展開",
-    extremum: "1変数極値判定",
-    multivariable: "多変数関数の数理"
+    theory: "言葉の定義・基礎知識",
+    estimation: "最尤推定・ベイズ推定",
+    optimization: "解の推定・非線形最適化",
+    clustering: "K平均法クラスタリング"
   };
   const categoryBadge = document.getElementById("quiz-category-badge");
-  categoryBadge.textContent = categoryNames[q.category] || "その他";
+  categoryBadge.textContent = categoryNames[q.category] || "機械学習";
   categoryBadge.className = `badge cat-badge-${q.category}`;
   
   // Bookmark button state
@@ -207,7 +250,7 @@ function showQuestion(index) {
   
   // Question text
   document.getElementById("quiz-question-title").textContent = q.title;
-  document.getElementById("quiz-question-text").textContent = q.question;
+  document.getElementById("quiz-question-text").innerHTML = q.question;
   
   // Clean feedback details
   document.getElementById("quiz-feedback-card").classList.add("hidden");
@@ -215,6 +258,11 @@ function showQuestion(index) {
   document.getElementById("keyword-feedback-area").classList.add("hidden");
   
   renderAnswerArea(q);
+  
+  // Trigger MathJax rendering for LaTeX equations
+  if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+    window.MathJax.typesetPromise();
+  }
 }
 
 function renderAnswerArea(q) {
@@ -262,7 +310,7 @@ function renderAnswerArea(q) {
       defOpt.textContent = `空欄 ${blank.label} の語句を選択してください`;
       select.appendChild(defOpt);
       
-      blank.choices.forEach((choice, index) => {
+      q.choices.forEach((choice, index) => {
         const opt = document.createElement("option");
         opt.value = index + 1;
         opt.textContent = choice;
@@ -393,8 +441,8 @@ function submitAnswer() {
       if (val === blank.answer) {
         correctCount++;
       }
-      userAnsArray.push(`${blank.label}: ${val ? blank.choices[val - 1] : "未選択"}`);
-      correctAnsArray.push(`${blank.label}: ${blank.choices[blank.answer - 1]}`);
+      userAnsArray.push(`[${blank.label}]: ${val ? q.choices[val - 1] : "未選択"}`);
+      correctAnsArray.push(`[${blank.label}]: ${q.choices[blank.answer - 1]}`);
     });
     
     if (!allFilled) {
@@ -436,7 +484,7 @@ function submitAnswer() {
       isCorrect = true;
       partialScore = 2;
     } else if (coverage >= 0.5) {
-      isCorrect = true; // Classified as correct in historical logs but gets partial styling
+      isCorrect = true;
       partialScore = 1;
     } else {
       isCorrect = false;
@@ -513,12 +561,13 @@ function submitAnswer() {
   
   document.getElementById("feedback-user-answer").innerHTML = userRawAnswer;
   document.getElementById("feedback-correct-answer").innerHTML = correctDisplayAnswer;
-  document.getElementById("feedback-explanation-text").textContent = q.explanation;
+  document.getElementById("feedback-explanation-text").innerHTML = q.explanation;
 }
 
 function renderKeywordFeedback(matchResults) {
   const area = document.getElementById("keyword-feedback-area");
   const container = document.getElementById("keyword-match-list");
+  if (!container) return;
   container.innerHTML = "";
   area.classList.remove("hidden");
   
@@ -553,7 +602,13 @@ function showResults() {
   document.getElementById("result-percentage").textContent = `${percentage}%`;
   
   document.getElementById("result-wrong-added").textContent = quizState.wrongAddedCount;
-  document.getElementById("result-bookmarks-total").textContent = getBookmarks().length;
+  
+  // Calculate active course bookmarks total
+  const activeCourseQuestionIds = questions
+    .filter(q => q.source === quizState.currentCourse)
+    .map(q => q.id);
+  const filteredBookmarks = getBookmarks().filter(id => activeCourseQuestionIds.includes(id));
+  document.getElementById("result-bookmarks-total").textContent = filteredBookmarks.length;
   
   switchScreen("screen-result");
 }
