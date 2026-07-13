@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人間中心設計 期末テスト対策一問一答</title>
+  <!-- Flicker Prevention Script for Theme Toggle -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <!-- Google Fonts & Icon -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <!-- Shared Feedback Widget CSS -->
+  <link rel="stylesheet" href="../feedback.css">
+  <!-- MathJax for rendering equations (just in case) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="glow-orb" id="orb1"></div>
+  <div class="glow-orb" id="orb2"></div>
+
+  <div class="app-container">
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <div class="logo">
+        <a href="../index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-people-arrows neon-text-purple"></i>
+          <span class="logo-title">HCD <span class="neon-text-purple">STUDY</span></span>
+        </a>
+      </div>
+      <div class="header-stats" style="display: flex; align-items: center; gap: 10px;">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" title="テーマ切り替え" style="width: 32px; height: 32px; font-size: 0.95rem;">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <a href="../送信内容確認ページ/index.html" class="btn btn-secondary btn-sm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); height: 32px;">
+          <i class="fa-solid fa-clipboard-list"></i> フィードバック確認
+        </a>
+        <span id="header-bookmark-count" class="badge badge-bookmark">
+          <i class="fa-solid fa-star"></i> <span class="count">0</span>
+        </span>
+        <span id="header-wrong-count" class="badge badge-wrong">
+          <i class="fa-solid fa-circle-xmark"></i> <span class="count">0</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- メインコンテンツ領域 -->
+    <main class="app-content">
+
+      <!-- ================= HOME SCREEN ================= -->
+      <section id="screen-home" class="screen active">
+        <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
+          <a href="../index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; text-decoration: none;">
+            <i class="fa-solid fa-chevron-left"></i> 試験対策ポータルに戻る
+          </a>
+        </div>
+        <div class="hero-section">
+          <h1 class="hero-title">人間中心設計 <span class="gradient-text">テスト対策</span></h1>
+          <p class="hero-subtitle">期末テスト過去問・理解度テスト（プロセス・UX白書・ユーザビリティ）完全対策</p>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- クイックスタートカード -->
+          <div class="dashboard-card action-card">
+            <h3>学習モードを選択</h3>
+            <div class="mode-buttons">
+              <button class="btn btn-primary btn-lg" onclick="startQuiz('all')">
+                <i class="fa-solid fa-play"></i> 全問連続で解く
+              </button>
+              <button class="btn btn-secondary" onclick="startQuiz('wrong')">
+                <i class="fa-solid fa-circle-xmark text-wrong"></i> 間違えた問題（要復習）
+              </button>
+              <button class="btn btn-secondary" onclick="startQuiz('bookmarked')">
+                <i class="fa-solid fa-star text-bookmark"></i> ブックマークした問題
+              </button>
+            </div>
+          </div>
+
+          <!-- カテゴリ選択カード -->
+          <div class="dashboard-card">
+            <h3>分野別に挑戦</h3>
+            <div class="category-list">
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'hcd_process')">
+                <span class="cat-icon"><i class="fa-solid fa-rotate"></i></span>
+                <span class="cat-name">HCDプロセスと原則</span>
+                <span class="cat-desc">プロセスの4つの活動、6つの基本原則、ユーザー評価</span>
+              </button>
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'ux_periods')">
+                <span class="cat-icon"><i class="fa-solid fa-people-arrows"></i></span>
+                <span class="cat-name">UX期間モデルと設計</span>
+                <span class="cat-desc">UX白書の4つの期間、UXとUXDの違い、ユーザー分析</span>
+              </button>
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'usability_def')">
+                <span class="cat-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+                <span class="cat-name">ユーザビリティと利用状況</span>
+                <span class="cat-desc">ISO 9241-11の定義、利用状況の4要素、具体例</span>
+              </button>
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'evaluation_methods')">
+                <span class="cat-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <span class="cat-name">ユーザー調査と評価</span>
+                <span class="cat-desc">調査・評価手法の分類、KA法（価値・心の声の抽出）</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 途中から開始カード -->
+        <div class="dashboard-card list-card">
+          <h3>問題を選んで途中から開始</h3>
+          <div class="question-selector-grid" id="question-list-container">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= QUIZ SCREEN ================= -->
+      <section id="screen-quiz" class="screen">
+        <div class="quiz-header">
+          <button class="btn btn-icon-only" onclick="goToHome()" title="ホームに戻る">
+            <i class="fa-solid fa-house"></i>
+          </button>
+          <div class="quiz-progress-container">
+            <div class="progress-info">
+              <span id="quiz-category-badge" class="badge">HCDプロセス</span>
+              <span id="quiz-progress-text">1 / 12</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="quiz-progress-bar"></div>
+            </div>
+          </div>
+          <button class="btn btn-icon-only" id="btn-bookmark" onclick="toggleBookmarkCurrent()" title="ブックマークに追加/削除">
+            <i class="fa-regular fa-star"></i>
+          </button>
+        </div>
+
+        <!-- クイズカード -->
+        <div class="quiz-card">
+          <div class="quiz-question-title" id="quiz-question-title">問1 (1-1) プロセス評価</div>
+          <div class="quiz-question-text" id="quiz-question-text">
+            問題文がここに入ります。
+          </div>
+
+          <!-- 解答入力エリア (問題タイプによって動的に切り替え) -->
+          <div class="quiz-answer-area" id="quiz-answer-area">
+            <!-- 選択問題、複数空欄、テキスト入力、記述入力がここに動的に生成されます -->
+          </div>
+
+          <!-- ボタン操作エリア -->
+          <div class="quiz-action-area">
+            <button class="btn btn-primary btn-lg" id="btn-submit-answer" onclick="submitAnswer()">
+              <i class="fa-solid fa-circle-check"></i> 解答する
+            </button>
+          </div>
+        </div>
+
+        <!-- フィードバック・解説エリア (解答後に表示) -->
+        <div class="feedback-card hidden" id="quiz-feedback-card">
+          <div class="feedback-status" id="feedback-status">
+            <i class="fa-solid fa-circle-check"></i> <span id="feedback-status-text">正解！</span>
+          </div>
+
+          <!-- 記述問題用の詳細採点フィードバック -->
+          <div class="keyword-feedback hidden" id="keyword-feedback-area">
+            <h5>重要キーワード検出判定:</h5>
+            <div class="keyword-match-list" id="keyword-match-list">
+              <!-- キーワードの検出状態 -->
+            </div>
+            <p class="keyword-hint-text">※採点基準となる必須ワードが記述に含まれているかを判定しています。</p>
+          </div>
+
+          <div class="feedback-content">
+            <div class="feedback-answers-comparison">
+              <div class="answer-box user-answer" id="comparison-user-box">
+                <h6>あなたの解答:</h6>
+                <div id="feedback-user-answer">-</div>
+              </div>
+              <div class="answer-box correct-answer" id="comparison-correct-box">
+                <h6>模範解答例:</h6>
+                <div id="feedback-correct-answer">-</div>
+              </div>
+            </div>
+
+            <div class="feedback-explanation">
+              <h6><i class="fa-solid fa-circle-info neon-text-purple"></i> 解説:</h6>
+              <p id="feedback-explanation-text">解説テキストがここに入ります。</p>
+            </div>
+          </div>
+
+          <div class="feedback-actions">
+            <button class="btn btn-primary" id="btn-next-question" onclick="nextQuestion()">
+              次の問題へ <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= RESULT SCREEN ================= -->
+      <section id="screen-result" class="screen">
+        <div class="result-card text-center">
+          <div class="result-icon-glow">
+            <i class="fa-solid fa-trophy neon-text-purple"></i>
+          </div>
+          <h2 class="result-title">学習セッション終了</h2>
+          
+          <div class="score-display">
+            <span class="score-num" id="result-score">0</span>
+            <span class="score-slash">/</span>
+            <span class="score-total" id="result-total">0</span>
+          </div>
+          <p class="result-percentage">正答率: <span id="result-percentage">0%</span></p>
+
+          <div class="result-stats-row">
+            <div class="stat-box">
+              <span class="stat-val text-wrong" id="result-wrong-added">0</span>
+              <span class="stat-lbl">要復習に追加</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-val text-bookmark" id="result-bookmarks-total">0</span>
+              <span class="stat-lbl">総ブックマーク</span>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button class="btn btn-primary btn-lg" onclick="restartQuiz()">
+              <i class="fa-solid fa-arrows-rotate"></i> 同じ条件で再挑戦
+            </button>
+            <button class="btn btn-secondary" onclick="goToHome()">
+              <i class="fa-solid fa-house"></i> ホームに戻る
+            </button>
+            <a href="../index.html" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-shapes"></i> ポータルに戻る
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- フッター -->
+    <footer class="app-footer">
+      <p>&copy; 2026 人間中心設計 期末テスト対策一問一答システム</p>
+    </footer>
+  </div>
+
+  <!-- JavaScript Load with Cache Busters -->
+  <script src="questions.js?v=1.0"></script>
+  <script src="app.js?v=1.0"></script>
+  <!-- Shared Feedback Widget Logic -->
+  <script src="../feedback.js"></script>
+  <!-- Theme Controller -->
+  <script src="../../theme.js"></script>
+</body>
+</html>

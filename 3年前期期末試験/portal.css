@@ -720,3 +720,31 @@ body {
 .inline-feedback-submit-btn:active {
   transform: translateY(0);
 }
+
+/* --- HCD Specific Styling --- */
+.card-hcd { --card-glow-color: var(--neon-purple); }
+.card-hcd .card-icon { color: var(--neon-purple); }
+.card-hcd:hover { border-color: rgba(168, 85, 247, 0.3); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.15); }
+.card-hcd .card-link-text { color: var(--neon-purple); }
+
+/* --- Disabled Subject Cards --- */
+.disabled-card {
+  opacity: 0.65;
+  transition: all 0.3s ease;
+}
+
+.disabled-card:hover {
+  opacity: 0.9;
+}
+
+.status-badge {
+  align-self: flex-start;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: var(--neon-yellow);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
