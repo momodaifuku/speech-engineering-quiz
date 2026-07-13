@@ -74,17 +74,24 @@ function updateHeaderStats() {
 
 // --- Switch Learning Course (Kakomon vs Practice) ---
 function switchCourse(course) {
-  quizState.currentCourse = course;
+  // Map UI tabs (final_past / final_lecture) to internal sources (kakomon / practice)
+  if (course === 'final_past' || course === 'kakomon') {
+    quizState.currentCourse = 'kakomon';
+  } else {
+    quizState.currentCourse = 'practice';
+  }
   
   // Update Tab active classes
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.classList.remove("active");
   });
   
-  if (course === 'kakomon') {
-    document.getElementById("tab-kakomon").classList.add("active");
+  if (quizState.currentCourse === 'kakomon') {
+    const tab = document.getElementById("tab-final_past");
+    if (tab) tab.classList.add("active");
   } else {
-    document.getElementById("tab-practice").classList.add("active");
+    const tab = document.getElementById("tab-final_lecture");
+    if (tab) tab.classList.add("active");
   }
   
   updateHeaderStats();
@@ -226,9 +233,9 @@ function showQuestion(index) {
   
   // Category badge
   const categoryNames = {
-    basic: "音声の基礎・分類",
-    anatomy: "発声・呼吸の生理",
-    acoustics: "音響・信号処理"
+    physics: "声道・声帯の物理",
+    synthesis: "ソースフィルタ・音声合成",
+    recognition: "音声認識・差分法"
   };
   const categoryBadge = document.getElementById("quiz-category-badge");
   categoryBadge.textContent = categoryNames[q.category] || "音声工学";
@@ -247,13 +254,18 @@ function showQuestion(index) {
   
   // Question Title & Text
   document.getElementById("quiz-question-title").textContent = q.title;
-  document.getElementById("quiz-question-text").textContent = q.question;
+  document.getElementById("quiz-question-text").innerHTML = q.question;
   
   // Hide feedback panels, show submit button
   document.getElementById("quiz-feedback-card").classList.add("hidden");
   document.getElementById("btn-submit-answer").classList.remove("hidden");
   
   renderAnswerArea(q);
+  
+  // Trigger MathJax rendering for LaTeX equations
+  if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+    window.MathJax.typesetPromise();
+  }
 }
 
 function renderAnswerArea(q) {
@@ -484,7 +496,7 @@ function submitAnswer() {
   
   document.getElementById("feedback-user-answer").innerHTML = userRawAnswer;
   document.getElementById("feedback-correct-answer").innerHTML = correctDisplayAnswer;
-  document.getElementById("feedback-explanation-text").textContent = q.explanation;
+  document.getElementById("feedback-explanation-text").innerHTML = q.explanation;
 }
 
 function nextQuestion() {

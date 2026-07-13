@@ -46,23 +46,23 @@
       <!-- ================= HOME SCREEN ================= -->
       <section id="screen-home" class="screen active">
         <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
-          <a href="../index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 8px;">
+          <a href="../index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
             <i class="fa-solid fa-chevron-left"></i> 試験対策ポータルに戻る
           </a>
         </div>
         <div class="hero-section">
-          <h1 class="hero-title">音声工学 <span class="gradient-text">テスト対策</span></h1>
-          <p class="hero-subtitle">中間・期末過去問（言語学・生理・音響・信号処理）完全対策</p>
+          <h1 class="hero-title">音声工学 <span class="gradient-text">期末対策</span></h1>
+          <p class="hero-subtitle">期末過去問・授業資料（声道・声帯・ソースフィルタ理論・音声認識・合成）完全対策</p>
         </div>
 
         <!-- コース選択タブ -->
         <div class="course-tabs-container">
           <div class="course-tabs">
-            <button id="tab-kakomon" class="tab-btn active" onclick="switchCourse('kakomon')">
-              <i class="fa-solid fa-graduation-cap"></i> 過去問モード (全21問)
+            <button id="tab-final_past" class="tab-btn active" onclick="switchCourse('final_past')">
+              <i class="fa-solid fa-graduation-cap"></i> 過去問モード (全7問)
             </button>
-            <button id="tab-practice" class="tab-btn" onclick="switchCourse('practice')">
-              <i class="fa-solid fa-pencil"></i> テスト対策モード (全15問)
+            <button id="tab-final_lecture" class="tab-btn" onclick="switchCourse('final_lecture')">
+              <i class="fa-solid fa-pencil"></i> 授業資料ピックアップ問題 (全8問)
             </button>
           </div>
         </div>
@@ -73,7 +73,7 @@
             <h3>学習モードを選択</h3>
             <div class="mode-buttons">
               <button class="btn btn-primary btn-lg" onclick="startQuiz('all')">
-                <i class="fa-solid fa-play"></i> 全問連続で解く
+                <i class="fa-solid fa-play"></i> 現在のモードを全問解く
               </button>
               <button class="btn btn-secondary" onclick="startQuiz('wrong')">
                 <i class="fa-solid fa-circle-xmark text-wrong"></i> 間違えた問題のみ
@@ -88,20 +88,20 @@
           <div class="dashboard-card">
             <h3>分野別に挑戦</h3>
             <div class="category-list">
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'basic')">
-                <span class="cat-icon"><i class="fa-solid fa-language"></i></span>
-                <span class="cat-name">音声の基礎・分類</span>
-                <span class="cat-desc">言語系統、音の発生原因、モーラ数等</span>
-              </button>
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'anatomy')">
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'physics')">
                 <span class="cat-icon"><i class="fa-solid fa-lungs"></i></span>
-                <span class="cat-name">発声・呼吸の生理</span>
-                <span class="cat-desc">声帯調節、呼気・吸気、舌の運動等</span>
+                <span class="cat-name">声道・声帯の物理</span>
+                <span class="cat-desc">閉管共鳴周波数、2質量モデル、ベルヌーイ効果など</span>
               </button>
-              <button class="btn btn-outline-category" onclick="startQuiz('category', 'acoustics')">
-                <span class="cat-icon"><i class="fa-solid fa-wave-square"></i></span>
-                <span class="cat-name">音響・信号処理</span>
-                <span class="cat-desc">自己相関、ケプストラム、LPC、子音等</span>
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'synthesis')">
+                <span class="cat-icon"><i class="fa-solid fa-waveform"></i></span>
+                <span class="cat-name">ソースフィルタ理論・音声合成</span>
+                <span class="cat-desc">たたみこみ、傾き、Rosenberg波、形態素解析など</span>
+              </button>
+              <button class="btn btn-outline-category" onclick="startQuiz('category', 'recognition')">
+                <span class="cat-icon"><i class="fa-solid fa-square-poll-vertical"></i></span>
+                <span class="cat-name">音声認識・差分法</span>
+                <span class="cat-desc">DPマッチング、HMM、MFCC、N-gram、加速度差分</span>
               </button>
             </div>
           </div>
@@ -125,7 +125,7 @@
           <div class="quiz-progress-container">
             <div class="progress-info">
               <span id="quiz-category-badge" class="badge">音声の基礎・分類</span>
-              <span id="quiz-progress-text">1 / 21</span>
+              <span id="quiz-progress-text">1 / 7</span>
             </div>
             <div class="progress-bar-bg">
               <div class="progress-bar-fill" id="quiz-progress-bar"></div>
@@ -232,13 +232,13 @@
 
     <!-- フッター -->
     <footer class="app-footer">
-      <p>&copy; 2026 音声工学 テスト対策一問一答システム</p>
+      <p>&copy; 2026 音声工学 期末テスト対策一問一答システム</p>
     </footer>
   </div>
 
-  <!-- JavaScript Load -->
-  <script src="questions.js"></script>
-  <script src="app.js"></script>
+  <!-- JavaScript Load with Cache Busters -->
+  <script src="questions.js?v=2.2"></script>
+  <script src="app.js?v=2.2"></script>
   <!-- Shared Feedback Widget Logic -->
   <script src="../feedback.js"></script>
 </body>
