@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // テーマの復元 (ポータルと共通の 'theme' キーを使用)
+  const savedTheme = localStorage.getItem("theme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+
   function safeJSONParse(key, defaultValue) {
     try {
       const val = localStorage.getItem(key);
@@ -139,14 +143,30 @@ document.addEventListener("DOMContentLoaded", () => {
       if (q.options && q.options.length > 0) {
         optionsContainer.classList.remove("hidden");
         optionsContainer.innerHTML = "";
-        q.options.forEach(opt => {
+        q.options.forEach((opt, idx) => {
           const div = document.createElement("div");
           div.className = "option-item";
-          div.style.padding = "10px";
-          div.style.border = "1px solid rgba(255,255,255,0.2)";
+          div.style.padding = "12px 16px";
+          div.style.border = "2px solid rgba(255,255,255,0.1)";
           div.style.borderRadius = "8px";
           div.style.marginBottom = "8px";
+          div.style.cursor = "pointer";
+          div.style.transition = "all 0.2s ease";
           div.textContent = opt;
+          
+          // 選択肢のクリックイベント
+          div.addEventListener("click", (e) => {
+            e.preventDefault();
+            div.classList.toggle("selected");
+            if (div.classList.contains("selected")) {
+              div.style.borderColor = "var(--accent-blue)";
+              div.style.backgroundColor = "rgba(0, 168, 255, 0.1)";
+            } else {
+              div.style.borderColor = "rgba(255,255,255,0.1)";
+              div.style.backgroundColor = "transparent";
+            }
+          });
+          
           optionsContainer.appendChild(div);
         });
       } else {
@@ -240,7 +260,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function toggleTheme() {
     const root = document.documentElement;
     const isDark = root.getAttribute("data-theme") === "dark";
-    root.setAttribute("data-theme", isDark ? "light" : "dark");
+    const newTheme = isDark ? "light" : "dark";
+    root.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
   }
 
   // --- Event Listeners (Safeguarded with preventDefault) ---
