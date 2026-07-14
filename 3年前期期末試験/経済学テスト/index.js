@@ -32,6 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const btnQuiz = document.getElementById("card-mode-quiz");
   const btnFlashcards = document.getElementById("card-mode-flashcards");
+  const btnMacroQuiz = document.getElementById("card-mode-macro-quiz");
+  const btnMacroPractice = document.getElementById("card-mode-macro-practice");
   const btnBackHome = document.getElementById("btn-back-home");
   const btnLogoHome = document.getElementById("btn-logo-home");
   const btnSubmit = document.getElementById("btn-submit");
@@ -148,6 +150,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (mode === "quiz") {
       questionsSrc = quizData.quiz;
       modeNameIndicator.textContent = "小テスト完全再現";
+    } else if (mode === "macroQuiz") {
+      questionsSrc = quizData.macroQuiz;
+      modeNameIndicator.textContent = "マクロ経済学 小テスト再現";
+    } else if (mode === "macroPractice") {
+      questionsSrc = quizData.macroPractice;
+      modeNameIndicator.textContent = "マクロ経済学 授業スライド対策";
     } else if (mode === "flashcards") {
       // フラッシュカードを一問一答クイズに変換して出題
       questionsSrc = allQuestionsPool.filter(q => q.id.startsWith("f_"));
@@ -1108,6 +1116,9 @@ document.addEventListener("DOMContentLoaded", () => {
   btnRestartQuiz.addEventListener("click", () => {
     startMode(currentMode);
   });
+
+  if (btnMacroQuiz) btnMacroQuiz.addEventListener("click", () => startMode("macroQuiz"));
+  if (btnMacroPractice) btnMacroPractice.addEventListener("click", () => startMode("macroPractice"));
 
   // ------------------------------------------------------------------------
   // 10. 問題一覧ナビゲーター機能

@@ -16,10 +16,26 @@ document.addEventListener("DOMContentLoaded", () => {
   let wrongQuestions = []; // 間違えた問題の記録
   let questionStatuses = {}; // 問題ごとの解答状況を保存用 { q_id: 'correct' | 'wrong' }
 
+  // localStorageの安全な取得ヘルパー
+  function safeJSONParse(key, defaultValue) {
+    try {
+      const val = localStorage.getItem(key);
+      return val ? JSON.parse(val) : defaultValue;
+    } catch (e) {
+      console.warn("localStorage parse error for key:", key, e);
+      return defaultValue;
+    }
+  }
+
   // 永続化用のデータ
-  let bookmarks = JSON.parse(localStorage.getItem("econ_bookmarks")) || [];
-  let wrongs = JSON.parse(localStorage.getItem("econ_wrongs")) || [];
-  let allQuestionsPool = []; // 全問題のプール（復習時の抽出用）
+  let bookmarks = safeJSONParse("econ_bookmarks", []);
+  let wrongs = safeJSONParse("econ_wrongs", []);
+  let masteredIds = safeJSONParse("econ_mastered", []); // 3回以上正解した問題
+  let correctCounts = safeJSONParse("econ_correct_counts", {}); // 各問題の正解回数
+  let currentStreak = parseInt(localStorage.getItem("econ_streak")) || 0; // 連続正解数
+  let totalAnswered = parseInt(localStorage.getItem("econ_total_answered")) || 0; // 総解答数
+  let totalCorrect = parseInt(localStorage.getItem("econ_total_correct")) || 0; // 総正解数
+  let allQuestionsPool = []; // 全問題のプール（復習・検索用）
 
   // ------------------------------------------------------------------------
   // 2. DOM要素の取得
@@ -27,7 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const screens = {
     home: document.getElementById("screen-home"),
     learning: document.getElementById("screen-learning"),
-    result: document.getElementById("screen-result")
+    result: document.getElementById("screen-result"),
+    cheatsheet: document.getElementById("screen-cheatsheet")
   };
 
   const btnQuiz = document.getElementById("card-mode-quiz");
@@ -90,8 +107,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ホーム画面のブックマーク・弱点問題数を更新
   function updateHomeStats() {
-    if (statBookmarksCount) statBookmarksCount.textContent = bookmarks.length;
-    if (statWrongsCount) statWrongsCount.textContent = wrongs.length;
+    if (document.getElementById("stat-bookmarks-count")) {
+      document.getElementById("stat-bookmarks-count").textContent = bookmarks.length;
+    }
+    if (document.getElementById("card-stat-bookmarks-count")) {
+      document.getElementById("card-stat-bookmarks-count").textContent = bookmarks.length;
+    }
+    if (document.getElementById("stat-wrongs-count")) {
+      document.getElementById("stat-wrongs-count").textContent = wrongs.length;
+    }
+    if (document.getElementById("card-stat-wrongs-count")) {
+      document.getElementById("card-stat-wrongs-count").textContent = wrongs.length;
+    }
+    // ダッシュボード統計の更新
+    const totalQCount = allQuestionsPool.length || (quizData.quiz.length + quizData.flashcards.length);
+    if (document.getElementById("stat-total-answered")) {
+      document.getElementById("stat-total-answered").textContent = totalAnswered;
+    }
+    if (document.getElementById("stat-correct-rate")) {
+      const rate = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
+      document.getElementById("stat-correct-rate").textContent = rate + "%";
+    }
+    if (document.getElementById("stat-streak")) {
+      document.getElementById("stat-streak").textContent = currentStreak;
+    }
+    if (document.getElementById("stat-mastered")) {
+      document.getElementById("stat-mastered").textContent = masteredIds.length;
+    }
+    // 習得率バー
+    const masteryPct = totalQCount > 0 ? Math.min(100, Math.round((masteredIds.length / totalQCount) * 100)) : 0;
+    if (document.getElementById("stat-mastery-pct")) {
+      document.getElementById("stat-mastery-pct").textContent = masteryPct + "%";
+    }
+    if (document.getElementById("stat-mastery-bar")) {
+      document.getElementById("stat-mastery-bar").style.width = masteryPct + "%";
+    }
   }
 
   // 全問題プール（復習・検索用）の初期化
@@ -362,6 +412,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 解答状況を記録
     questionStatuses[q.id] = isCorrect ? 'correct' : 'wrong';
+
+    // 総解答数・正解数の更新
+    totalAnswered++;
+    localStorage.setItem("econ_total_answered", totalAnswered);
+    if (isCorrect) {
+      totalCorrect++;
+      currentStreak++;
+      localStorage.setItem("econ_total_correct", totalCorrect);
+      localStorage.setItem("econ_streak", currentStreak);
+      // 正解回数の累計更新 → 3回以上で習得済みに
+      correctCounts[q.id] = (correctCounts[q.id] || 0) + 1;
+      localStorage.setItem("econ_correct_counts", JSON.stringify(correctCounts));
+      if (correctCounts[q.id] >= 3 && !masteredIds.includes(q.id)) {
+        masteredIds.push(q.id);
+        localStorage.setItem("econ_mastered", JSON.stringify(masteredIds));
+      }
+    } else {
+      currentStreak = 0;
+      localStorage.setItem("econ_streak", currentStreak);
+    }
 
     // 弱点克服リストの更新
     if (isCorrect) {
@@ -1094,8 +1164,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // ------------------------------------------------------------------------
   // 9. イベントリスナのバインド
   // ------------------------------------------------------------------------
-  btnQuiz.addEventListener("click", () => startMode("quiz"));
-  btnFlashcards.addEventListener("click", () => startMode("flashcards"));
+  if (btnQuiz) {
+    btnQuiz.addEventListener("click", () => startMode("quiz"));
+    const innerQuizBtn = btnQuiz.querySelector(".btn");
+    if (innerQuizBtn) innerQuizBtn.addEventListener("click", (e) => { e.stopPropagation(); startMode("quiz"); });
+  }
+
+  if (btnFlashcards) {
+    btnFlashcards.addEventListener("click", () => startMode("flashcards"));
+    const innerFlashBtn = btnFlashcards.querySelector(".btn");
+    if (innerFlashBtn) innerFlashBtn.addEventListener("click", (e) => { e.stopPropagation(); startMode("flashcards"); });
+  }
   
   btnBackHome.addEventListener("click", () => switchScreen("home"));
   btnLogoHome.addEventListener("click", () => switchScreen("home"));
@@ -1108,6 +1187,37 @@ document.addEventListener("DOMContentLoaded", () => {
   btnRestartQuiz.addEventListener("click", () => {
     startMode(currentMode);
   });
+
+  // チートシートモードのボタン
+  const btnCheatsheet = document.getElementById("card-mode-cheatsheet");
+  if (btnCheatsheet) {
+    btnCheatsheet.addEventListener("click", () => switchScreen("cheatsheet"));
+    const cheatBtn = btnCheatsheet.querySelector(".btn-cheat");
+    if (cheatBtn) cheatBtn.addEventListener("click", (e) => { e.stopPropagation(); switchScreen("cheatsheet"); });
+  }
+
+  // チートシート「ホームへ戻る」ボタン
+  const btnCheatsheetBack = document.getElementById("btn-cheatsheet-back");
+  if (btnCheatsheetBack) {
+    btnCheatsheetBack.addEventListener("click", () => switchScreen("home"));
+  }
+
+  // チートシートのタブ切り替え
+  const cheatsheetTabs = document.getElementById("cheatsheet-tabs");
+  if (cheatsheetTabs) {
+    cheatsheetTabs.addEventListener("click", (e) => {
+      const tab = e.target.closest(".cs-tab");
+      if (!tab) return;
+      // タブをアクティブ化
+      document.querySelectorAll(".cs-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      // 対応パネルを表示
+      const targetId = tab.dataset.tab;
+      document.querySelectorAll(".cs-panel").forEach(p => p.classList.remove("active"));
+      const targetPanel = document.getElementById(targetId);
+      if (targetPanel) targetPanel.classList.add("active");
+    });
+  }
 
   // ------------------------------------------------------------------------
   // 10. 問題一覧ナビゲーター機能

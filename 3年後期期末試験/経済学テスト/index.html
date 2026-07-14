@@ -9,9 +9,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="index.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="index.css?v=20260714">
   <!-- Shared Feedback Widget CSS -->
-  <link rel="stylesheet" href="../feedback.css">
+  <link rel="stylesheet" href="../feedback.css?v=20260714">
 </head>
 <body>
   <!-- 背景のネオングラデーション用デコレーション -->
@@ -109,8 +111,8 @@
             <h3>弱点克服・復習モード</h3>
             <p>ブックマークした問題や、過去に間違えた問題を抽出して集中的に復習・学習できます。</p>
             <div class="review-stats">
-              <div class="stat-badge">⭐ ブックマーク: <span id="stat-bookmarks-count">0</span>問</div>
-              <div class="stat-badge">❌ 要復習（弱点）: <span id="stat-wrongs-count">0</span>問</div>
+              <div class="stat-badge">⭐ ブックマーク: <span id="card-stat-bookmarks-count">0</span>問</div>
+              <div class="stat-badge">❌ 要復習（弱点）: <span id="card-stat-wrongs-count">0</span>問</div>
             </div>
             <div class="review-filter-select">
               <span class="filter-label">復習対象:</span>
@@ -121,6 +123,60 @@
               </select>
             </div>
             <button class="btn btn-accent btn-full" id="btn-start-review" style="margin-top: auto;">復習を開始する</button>
+          </div>
+
+          <!-- カード4: チートシート -->
+          <div class="mode-card glass-panel" id="card-mode-cheatsheet">
+            <div class="card-badge badge-cheat">まとめ</div>
+            <div class="card-icon">📋</div>
+            <h3>重要用語チートシート</h3>
+            <p>試験直前の総まとめ！経済学の重要概念・用語・公式を6つのテーマ別に整理。試験前の最終確認に最適です。</p>
+            <div class="card-meta">
+              <span>6テーマ</span>
+              <span>•</span>
+              <span>全用語網羅</span>
+            </div>
+            <button class="btn btn-cheat btn-full">チートシートを見る</button>
+          </div>
+        </div>
+
+        <!-- 学習統計ダッシュボード -->
+        <div class="info-section glass-panel dashboard-panel">
+          <h3>📊 学習進捗ダッシュボード</h3>
+          <div class="dashboard-grid">
+            <div class="dash-stat" id="dash-total-answered">
+              <div class="dash-num" id="stat-total-answered">0</div>
+              <div class="dash-label">解答済み問題</div>
+            </div>
+            <div class="dash-stat dash-stat--correct">
+              <div class="dash-num" id="stat-correct-rate">0%</div>
+              <div class="dash-label">正答率</div>
+            </div>
+            <div class="dash-stat">
+              <div class="dash-num" id="stat-streak">0</div>
+              <div class="dash-label">連続正解</div>
+            </div>
+            <div class="dash-stat dash-stat--bookmark">
+              <div class="dash-num" id="stat-bookmarks-count">0</div>
+              <div class="dash-label">ブックマーク</div>
+            </div>
+            <div class="dash-stat dash-stat--wrong">
+              <div class="dash-num" id="stat-wrongs-count">0</div>
+              <div class="dash-label">要復習</div>
+            </div>
+            <div class="dash-stat">
+              <div class="dash-num" id="stat-mastered">0</div>
+              <div class="dash-label">習得済み</div>
+            </div>
+          </div>
+          <div class="progress-overview">
+            <div class="progress-overview-label">
+              <span>全問習得まで</span>
+              <span id="stat-mastery-pct">0%</span>
+            </div>
+            <div class="progress-track" style="height:8px;">
+              <div id="stat-mastery-bar" class="progress-fill" style="width:0%;"></div>
+            </div>
           </div>
         </div>
 
@@ -154,6 +210,20 @@
               <div>
                 <h4>外部性と公共財</h4>
                 <p>社会的費用、ピグー税/補助金、コースの定理、公共財の非排除性/非競合性、共有地の悲劇</p>
+              </div>
+            </div>
+            <div class="topic-item">
+              <span class="topic-num">05</span>
+              <div>
+                <h4>費用便益・労働分配</h4>
+                <p>費用便益分析（B/C>1）、取引費用、公平性と効率性のトレードオフ、春闘・効率賃金仮説</p>
+              </div>
+            </div>
+            <div class="topic-item">
+              <span class="topic-num">06</span>
+              <div>
+                <h4>労働市場</h4>
+                <p>最低賃金・超過供給、労働生産性、名目賃金、裁量労働制、労働分配率</p>
               </div>
             </div>
           </div>
@@ -246,6 +316,239 @@
         </div>
       </section>
 
+      <!-- 4. チートシート画面 -->
+      <section id="screen-cheatsheet" class="screen">
+        <div class="cheatsheet-header">
+          <button id="btn-cheatsheet-back" class="btn btn-text">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            ホームへ戻る
+          </button>
+          <h2 class="cheatsheet-title">📋 重要用語チートシート</h2>
+          <p class="cheatsheet-subtitle">期末試験に出る重要概念・用語を一気にチェックしよう</p>
+        </div>
+
+        <div class="cheatsheet-tabs" id="cheatsheet-tabs">
+          <button class="cs-tab active" data-tab="cs-micro">ミクロ基礎</button>
+          <button class="cs-tab" data-tab="cs-market">競争市場</button>
+          <button class="cs-tab" data-tab="cs-monopoly">独占</button>
+          <button class="cs-tab" data-tab="cs-info">情報の非対称性</button>
+          <button class="cs-tab" data-tab="cs-externality">外部性・公共財</button>
+          <button class="cs-tab" data-tab="cs-labor">労働市場</button>
+        </div>
+
+        <!-- ミクロ基礎 -->
+        <div class="cs-panel active" id="cs-micro">
+          <div class="cs-grid">
+            <div class="cs-card glass-panel">
+              <div class="cs-term">消費者余剰</div>
+              <div class="cs-def">消費者の<span class="kw">支払意思額</span>（WTP）と実際の価格との差。<br><code>消費者余剰 = WTP − 価格</code></div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">生産者余剰</div>
+              <div class="cs-def">実際の価格と<span class="kw">機会費用</span>（生産に必要な最低価格）との差。<br><code>生産者余剰 = 価格 − 機会費用</code></div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">総余剰（社会的余剰）</div>
+              <div class="cs-def"><code>総余剰 = 消費者余剰 + 生産者余剰</code><br>完全競争市場で<span class="kw">最大化</span>される</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">完全競争市場</div>
+              <div class="cs-def">条件: ①多数の買い手・売り手（<span class="kw">価格受容者</span>）②情報の対称性 ③取引費用ほぼゼロ ④同質財</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">上級財 / 下級財</div>
+              <div class="cs-def">所得が増えたとき需要が<span class="kw">増える</span>財 → 上級財<br>所得が増えたとき需要が<span class="kw">減る</span>財 → 下級財</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">需要の価格弾力性</div>
+              <div class="cs-def">価格1%変化 → 需要量が1%<span class="kw">以上</span>変化 → <span class="kw">弾力的</span><br>価格1%変化 → 需要量が1%<span class="kw">未満</span>変化 → <span class="kw">非弾力的</span><br>※生活必需品は非弾力的</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">代替財 / 補完財</div>
+              <div class="cs-def"><span class="kw">代替財</span>の価格↑ → 注目財の需要<span class="kw">右シフト</span>↑<br><span class="kw">補完財</span>の価格↑ → 注目財の需要<span class="kw">左シフト</span>↓</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">機会費用</div>
+              <div class="cs-def">会計上の費用 + <span class="kw">見えない費用</span>（あきらめた最善の選択肢から得られた利益）</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 競争市場 -->
+        <div class="cs-panel" id="cs-market">
+          <div class="cs-grid">
+            <div class="cs-card glass-panel">
+              <div class="cs-term">価格の上限規制（天井価格）</div>
+              <div class="cs-def">均衡価格より<span class="kw">低い</span>上限設定 → <span class="kw">超過需要</span>発生 → 死荷重・品質低下</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">最低賃金（価格下限規制）</div>
+              <div class="cs-def">均衡賃金より<span class="kw">高い</span>下限設定 → <span class="kw">超過供給（失業）</span>発生 → 死荷重</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">死荷重（デッドウェイトロス）</div>
+              <div class="cs-def">価格規制・税・独占などによって<span class="kw">失われる社会的余剰の純損失</span>。完全競争時との差</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">費用便益分析</div>
+              <div class="cs-def">政策評価の手法。<code><span class="kw">便益（B） / 費用（C） &gt; 1</span></code> なら実施の目安</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">取引費用</div>
+              <div class="cs-def">契約・交渉・移動などに伴う費用。大きすぎると<span class="kw">本来成立するはずの取引が妨げられ</span>、総余剰が減少</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">効率性 vs 公平性</div>
+              <div class="cs-def">政府の所得再分配などで公平性↑ → 効率性（社会的余剰）↓ という<span class="kw">トレードオフ</span>関係</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 独占 -->
+        <div class="cs-panel" id="cs-monopoly">
+          <div class="cs-grid">
+            <div class="cs-card glass-panel">
+              <div class="cs-term">独占企業の特徴</div>
+              <div class="cs-def">・<span class="kw">価格設定者</span>（price setter）<br>・市場全体の需要曲線を知っている<br>・<span class="kw">供給曲線が存在しない</span></div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">利潤最大化条件</div>
+              <div class="cs-def"><code><span class="kw">MR = MC</span></code>（限界収入 = 限界費用）<br>これを満たす生産量Qを選択</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">独占の問題点</div>
+              <div class="cs-def">社会的に望ましい量より<span class="kw">過少生産</span>・<span class="kw">高価格</span>設定 → 死荷重の発生</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">法による独占</div>
+              <div class="cs-def">政府が与えた排他的権利。例：<span class="kw">特許・著作権</span>（イノベーション促進の目的）</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">自然独占</div>
+              <div class="cs-def">インフラ投資が大きく、1社独占が効率的な状態。例：<span class="kw">ガス・電気・水道事業</span></div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">カルテル vs 談合</div>
+              <div class="cs-def"><span class="kw">カルテル</span>：同業他社間での価格・生産量の共同決定<br><span class="kw">談合</span>：入札前に落札者と金額を事前に協定</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 情報の非対称性 -->
+        <div class="cs-panel" id="cs-info">
+          <div class="cs-grid">
+            <div class="cs-card glass-panel">
+              <div class="cs-term">情報の非対称性</div>
+              <div class="cs-def">取引の一方が他方より多くの情報を持っている状態。→ <span class="kw">市場の失敗</span>を引き起こす</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">逆選択（逆淘汰）</div>
+              <div class="cs-def">契約<span class="kw">前</span>の情報の非対称性。質の悪いものだけが市場に残る。<br>例：メルカリで粗悪品だけが出回る</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">モラルハザード</div>
+              <div class="cs-def">契約<span class="kw">後</span>の情報の非対称性。相手が見ていないとサボる。<br>例：保険加入後に不注意になる</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">シグナリング</div>
+              <div class="cs-def"><span class="kw">情報を持つ側</span>が自分の質の良さを相手に伝える行為<br>例：資格・学歴・評価の公開</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">スクリーニング</div>
+              <div class="cs-def"><span class="kw">情報を持たない側</span>が複数のメニューを提示し、相手のタイプを見分ける行為<br>例：保険の免責金額の差</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">モニタリング</div>
+              <div class="cs-def">プリンシパルがエージェントの行動を<span class="kw">監視・監査</span>することでモラルハザードを防ぐ</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">プリンシパル / エージェント</div>
+              <div class="cs-def"><span class="kw">プリンシパル</span>（本人）：仕事を依頼する側<br><span class="kw">エージェント</span>（代理人）：仕事を請け負う側</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 外部性・公共財 -->
+        <div class="cs-panel" id="cs-externality">
+          <div class="cs-grid">
+            <div class="cs-card glass-panel">
+              <div class="cs-term">外部性</div>
+              <div class="cs-def">市場を通さず第三者に直接影響を与えること。<br><span class="kw">負の外部性</span>→過大生産、<span class="kw">正の外部性</span>→過少生産</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">負の外部性の是正</div>
+              <div class="cs-def"><span class="kw">ピグー税</span>（汚染に課税）または<span class="kw">規制（内部化）</span><br>社会的費用 = 私的費用 + <span class="kw">外部費用</span></div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">ピグー補助金</div>
+              <div class="cs-def">正の外部性がある行動を促進するために政府が与える<span class="kw">補助金</span><br>例：ハイブリッド車の導入補助</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">純粋公共財</div>
+              <div class="cs-def"><span class="kw">非排除性</span>（利用制限不可） + <span class="kw">非競合性</span>（消費が他に影響しない）<br>例：国防・道路・灯台</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">フリーライダー問題</div>
+              <div class="cs-def">非排除的な財において、<span class="kw">対価を払わずに消費</span>するタダ乗り問題。民間供給が成立しない理由</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">共有資源（コモンズ）</div>
+              <div class="cs-def"><span class="kw">非排除性 + 競合性</span>を持つ財。例：漁業資源・牧草地<br>→ <span class="kw">共有地の悲劇</span>（過剰使用で枯渇）</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">財の4分類</div>
+              <div class="cs-def">
+                <table class="cs-table">
+                  <tr><th></th><th>排除性あり</th><th>排除性なし</th></tr>
+                  <tr><td>競合性あり</td><td>私的財</td><td>共有資源</td></tr>
+                  <tr><td>競合性なし</td><td>クラブ財</td><td>公共財</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 労働市場 -->
+        <div class="cs-panel" id="cs-labor">
+          <div class="cs-grid">
+            <div class="cs-card glass-panel">
+              <div class="cs-term">労働市場の構造</div>
+              <div class="cs-def"><span class="kw">労働需要曲線</span>：企業の行動（右下がり）<br><span class="kw">労働供給曲線</span>：労働者の行動（右上がり）</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">最低賃金の効果</div>
+              <div class="cs-def">均衡賃金より高い場合：<br>・需要量 Q1（企業の雇用）↓<br>・供給量 Q2（働きたい人）↑<br>→ <span class="kw">超過供給（失業）</span>＋<span class="kw">死荷重</span></div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">労働生産性</div>
+              <div class="cs-def">労働者<span class="kw">1人当たりが生み出す付加価値</span>。労働生産性↑ → 賃金↑の傾向</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">名目賃金 vs 実質賃金</div>
+              <div class="cs-def"><span class="kw">名目賃金</span>：物価調整前の賃金（日本では横ばい）<br><span class="kw">実質賃金</span>：物価調整後の購買力を示す賃金</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">効率賃金仮説</div>
+              <div class="cs-def">相場より<span class="kw">高い賃金</span>を払うことで、労働者の<span class="kw">モラルハザードを防ぎ生産性を高める</span>という仮説</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">春闘</div>
+              <div class="cs-def">日本の<span class="kw">労使の団体交渉</span>（春の賃金交渉）の仕組み。毎年3〜4月に実施</div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">裁量労働制</div>
+              <div class="cs-def"><span class="kw">労働者</span>が出退勤・仕事の進め方を決める働き方。企業は<span class="kw">残業代の支払い義務なし</span>。懸念は<span class="kw">長時間労働</span></div>
+            </div>
+            <div class="cs-card glass-panel">
+              <div class="cs-term">労働分配率</div>
+              <div class="cs-def">付加価値のうち<span class="kw">労働者が賃金として受け取った割合</span>。日本では低下傾向（内部留保の蓄積）</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- 3. 結果画面 -->
       <section id="screen-result" class="screen">
         <div class="result-container glass-panel">
@@ -315,9 +618,9 @@
   </div>
 
   <!-- クイズデータとメインスクリプトの読み込み -->
-  <script src="questions.js"></script>
-  <script src="index.js"></script>
+  <script src="questions.js?v=20260714"></script>
+  <script src="index.js?v=20260714"></script>
   <!-- Shared Feedback Widget Logic -->
-  <script src="../feedback.js"></script>
+  <script src="../feedback.js?v=20260714"></script>
 </body>
 </html>

@@ -1386,3 +1386,294 @@ svg#economic-svg .deadweight-loss {
   stroke: #f59e0b;
   filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.5));
 }
+
+/* --------------------------------------------------------------------------
+   NEW: チートシートカード・ダッシュボードのスタイル
+   -------------------------------------------------------------------------- */
+
+/* チートシートボタン */
+.btn-cheat {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+}
+.btn-cheat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+}
+.btn-accent {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #000;
+  font-family: var(--font-title);
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+.btn-accent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+}
+
+/* チートシートバッジ */
+.badge-cheat {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.badge-review {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+/* チートシートのカードの左アクセントライン */
+#card-mode-cheatsheet::before {
+  background: #10b981;
+}
+#card-mode-review::before {
+  background: #f59e0b;
+}
+
+/* モードカードグリッド (4列対応) */
+.mode-cards-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* --------------------------------------------------------------------------
+   ダッシュボードパネル
+   -------------------------------------------------------------------------- */
+.dashboard-panel {
+  margin-bottom: 30px;
+}
+.dashboard-panel h3 {
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+@media (max-width: 600px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.dash-stat {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+  transition: var(--transition-smooth);
+}
+.dash-stat:hover {
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-2px);
+}
+.dash-stat--correct { border-color: rgba(16, 185, 129, 0.4); }
+.dash-stat--bookmark { border-color: rgba(245, 158, 11, 0.4); }
+.dash-stat--wrong { border-color: rgba(239, 68, 68, 0.4); }
+.dash-num {
+  font-family: var(--font-title);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.dash-stat--correct .dash-num { color: var(--color-success); }
+.dash-stat--bookmark .dash-num { color: #f59e0b; }
+.dash-stat--wrong .dash-num { color: var(--color-error); }
+.dash-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.progress-overview {
+  margin-top: 8px;
+}
+.progress-overview-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   チートシート画面
+   -------------------------------------------------------------------------- */
+.cheatsheet-header {
+  margin-bottom: 30px;
+}
+.cheatsheet-title {
+  font-family: var(--font-title);
+  font-size: 32px;
+  font-weight: 800;
+  margin: 12px 0 8px;
+}
+.cheatsheet-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* タブ */
+.cheatsheet-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 16px;
+}
+.cs-tab {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  color: var(--text-secondary);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+.cs-tab:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.cs-tab.active {
+  background: var(--color-primary-glow);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: 0 0 12px var(--color-primary-glow);
+}
+
+/* パネルの表示制御 */
+.cs-panel {
+  display: none;
+  animation: fadeInUp 0.35s ease;
+}
+.cs-panel.active {
+  display: block;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* チートシートカードグリッド */
+.cs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+@media (max-width: 640px) {
+  .cs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 各カード */
+.cs-card {
+  padding: 20px;
+  border-radius: var(--radius-md);
+  transition: var(--transition-smooth);
+  position: relative;
+  border-left: 3px solid var(--color-primary) !important;
+}
+.cs-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--color-primary);
+}
+.cs-term {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary-hover);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cs-term::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cs-def {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.cs-def code {
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: var(--color-primary-hover);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'Outfit', monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* キーワードハイライト */
+.kw {
+  background: linear-gradient(120deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
+  color: var(--color-primary-hover);
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* チートシート内の表 */
+.cs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-top: 4px;
+}
+.cs-table th, .cs-table td {
+  border: 1px solid var(--panel-border);
+  padding: 4px 8px;
+  text-align: center;
+}
+.cs-table th {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--color-primary-hover);
+  font-weight: 700;
+}
+.cs-table td {
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   レスポンシブ対応
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .topics-grid {
+    grid-template-columns: 1fr;
+  }
+  .cheatsheet-title {
+    font-size: 24px;
+  }
+  .mode-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
