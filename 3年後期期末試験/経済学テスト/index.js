@@ -1165,15 +1165,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // 9. イベントリスナのバインド
   // ------------------------------------------------------------------------
   if (btnQuiz) {
-    btnQuiz.addEventListener("click", () => startMode("quiz"));
+    btnQuiz.addEventListener("click", (e) => { e.preventDefault(); startMode("quiz"); });
     const innerQuizBtn = btnQuiz.querySelector(".btn");
-    if (innerQuizBtn) innerQuizBtn.addEventListener("click", (e) => { e.stopPropagation(); startMode("quiz"); });
+    if (innerQuizBtn) innerQuizBtn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); startMode("quiz"); });
   }
 
   if (btnFlashcards) {
-    btnFlashcards.addEventListener("click", () => startMode("flashcards"));
+    btnFlashcards.addEventListener("click", (e) => { e.preventDefault(); startMode("flashcards"); });
     const innerFlashBtn = btnFlashcards.querySelector(".btn");
-    if (innerFlashBtn) innerFlashBtn.addEventListener("click", (e) => { e.stopPropagation(); startMode("flashcards"); });
+    if (innerFlashBtn) innerFlashBtn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); startMode("flashcards"); });
   }
   
   btnBackHome.addEventListener("click", () => switchScreen("home"));
