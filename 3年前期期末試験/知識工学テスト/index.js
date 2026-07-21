@@ -765,8 +765,6 @@ document.addEventListener("DOMContentLoaded", () => {
       
       const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
       const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
-    }
-  }
       marker.setAttribute("id", "arrow");
       marker.setAttribute("viewBox", "0 0 10 10");
       marker.setAttribute("refX", "5");
