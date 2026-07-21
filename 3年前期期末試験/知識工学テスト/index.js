@@ -43,8 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const screens = {
     home: document.getElementById("screen-home"),
     learning: document.getElementById("screen-learning"),
-    result: document.getElementById("screen-result"),
-    cheatsheet: document.getElementById("screen-cheatsheet")
+    result: document.getElementById("screen-result")
   };
 
   const btnQuiz = document.getElementById("card-mode-quiz");
