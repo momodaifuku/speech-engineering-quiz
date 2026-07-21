@@ -405,7 +405,9 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("選択肢を選んでください。");
         return;
       }
-      isCorrect = (selectedOption === q.answer);
+      isCorrect = (selectedOption === q.answer) || 
+                  selectedOption.startsWith(q.answer + ".") || 
+                  selectedOption.startsWith(q.answer + " ");
 
     } else if (q.type === "fill-gap") {
       // 全ての穴埋めが選択されているか確認
@@ -499,11 +501,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (isCorrect) {
       feedbackCard.classList.remove("wrong");
-      feedbackIcon.textContent = "✓";
+      feedbackIcon.textContent = "⭕️";
       feedbackTitle.textContent = "正解！";
     } else {
       feedbackCard.classList.add("wrong");
-      feedbackIcon.textContent = "✗";
+      feedbackIcon.textContent = "❌";
       
       // 正解の文字列を生成してフィードバックに表示
       let correctMsg = "不正解です。";
