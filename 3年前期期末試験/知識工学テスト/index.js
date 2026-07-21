@@ -405,9 +405,24 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("選択肢を選んでください。");
         return;
       }
-      isCorrect = (selectedOption === q.answer) || 
-                  selectedOption.startsWith(q.answer + ".") || 
-                  selectedOption.startsWith(q.answer + " ");
+      const answerTrimmed = q.answer.toString().trim();
+      const optionTextWithoutPrefix = selectedOption.replace(/^[^.\s:]+[\.\s:]+\s*/, "").trim();
+      
+      let isIndexMatch = false;
+      if (!isNaN(answerTrimmed) && q.options.length >= parseInt(answerTrimmed)) {
+        const expectedOption = q.options[parseInt(answerTrimmed) - 1];
+        if (selectedOption === expectedOption) {
+          isIndexMatch = true;
+        }
+      }
+      
+      isCorrect = (selectedOption.trim() === answerTrimmed) || 
+                  selectedOption.startsWith(answerTrimmed + ".") || 
+                  selectedOption.startsWith(answerTrimmed + " ") ||
+                  selectedOption.startsWith(answerTrimmed + ":") ||
+                  (optionTextWithoutPrefix === answerTrimmed) ||
+                  (optionTextWithoutPrefix.includes(answerTrimmed) && answerTrimmed.length > 2) ||
+                  isIndexMatch;
 
     } else if (q.type === "fill-gap") {
       // 全ての穴埋めが選択されているか確認
