@@ -326,6 +326,59 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedOption = e.target.value;
       });
       answerFormContainer.appendChild(textarea);
+    } else if (q.type === "order") {
+      selectedOption = [];
+      const container = document.createElement("div");
+      container.className = "order-container";
+
+      const selectedDiv = document.createElement("div");
+      selectedDiv.className = "order-selected";
+
+      const availableDiv = document.createElement("div");
+      availableDiv.className = "order-available";
+      
+      const availableOptions = [...q.options];
+      
+      function renderOrder() {
+        selectedDiv.innerHTML = '<div class="order-area-title">選択した順番 (クリックで元に戻す)</div>';
+        selectedOption.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.className = "order-item-btn";
+          btn.innerHTML = `<span class="order-index-badge">${idx + 1}</span><span>${opt}</span>`;
+          btn.addEventListener("click", () => {
+            selectedOption.splice(idx, 1);
+            availableOptions.push(opt);
+            renderOrder();
+          });
+          selectedDiv.appendChild(btn);
+        });
+        if (selectedOption.length === 0) {
+          const emptyMsg = document.createElement("div");
+          emptyMsg.style.color = "var(--text-muted)";
+          emptyMsg.style.padding = "0.5rem";
+          emptyMsg.textContent = "まだ何も選択されていません";
+          selectedDiv.appendChild(emptyMsg);
+        }
+
+        availableDiv.innerHTML = '<div class="order-area-title">選択肢 (クリックして順番に追加)</div>';
+        availableOptions.sort((a, b) => q.options.indexOf(a) - q.options.indexOf(b));
+        availableOptions.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.className = "order-item-btn";
+          btn.textContent = opt;
+          btn.addEventListener("click", () => {
+            availableOptions.splice(availableOptions.indexOf(opt), 1);
+            selectedOption.push(opt);
+            renderOrder();
+          });
+          availableDiv.appendChild(btn);
+        });
+      }
+
+      renderOrder();
+      container.appendChild(selectedDiv);
+      container.appendChild(availableDiv);
+      answerFormContainer.appendChild(container);
     }
 
     // グラフの描画
@@ -381,6 +434,18 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       isCorrect = true;
+    } else if (q.type === "order") {
+      if (!selectedOption || selectedOption.length !== q.options.length) {
+        alert("すべての選択肢を順番に並べてください。");
+        return;
+      }
+      isCorrect = true;
+      for (let i = 0; i < q.answer.length; i++) {
+        if (selectedOption[i] !== q.answer[i]) {
+          isCorrect = false;
+          break;
+        }
+      }
     }
 
     // 解答状況を記録
@@ -449,6 +514,8 @@ document.addEventListener("DOMContentLoaded", () => {
         Object.keys(q.gaps).forEach(k => {
           correctMsg += `[${k}] ${q.gaps[k].answer}  `;
         });
+      } else if (q.type === "order") {
+        correctMsg += ` 正しい順番: ${q.answer.join(" → ")}`;
       }
       feedbackTitle.textContent = correctMsg;
     }
