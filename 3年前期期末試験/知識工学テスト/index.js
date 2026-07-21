@@ -199,6 +199,12 @@ document.addEventListener("DOMContentLoaded", () => {
       currentQuestions = [...questionsSrc];
     }
 
+    if (currentQuestions.length === 0) {
+      alert("問題データの読み込みに失敗したか、対象の問題が存在しません。ページを再読み込みしてください。");
+      switchScreen("home");
+      return;
+    }
+
     switchScreen("learning");
     showQuestion();
   }
